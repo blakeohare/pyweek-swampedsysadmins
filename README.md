@@ -2,3 +2,4 @@
 Team NP's PyWeek #20 entry
 
 Blake can use github.
+stiva can as well.
