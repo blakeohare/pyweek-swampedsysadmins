@@ -71,18 +71,24 @@ class PlayBoard:
 	
 	def update(self, events):
 		
+		if self.active_drag != None and self.active_drag.done:
+			self.active_drag = None
+		
 		for event in events:
 			if event.mousedown:
 				member = self.find_staff_member(event.x, event.y)
 				if member != None:
-					drag = DragDescriptor(member, event.x, event.y)
+					self.drag_offset = (member.x - event.x, member.y - event.y)
+					drag = DragDescriptor(member)
+					drag.is_active = True
 					self.drag_descriptor.append(drag)
 					member.drag_path = drag
 					self.active_drag = drag
-					self.drag_offset = (member.x - event.x, member.y - event.y)
 			elif event.mouseup:
 				if self.active_drag != None:
+					self.active_drag.is_active = False
 					self.active_drag = None
+					
 			elif event.mousemove:
 				if self.active_drag != None:
 					self.active_drag.add_point(event.x + self.drag_offset[0], event.y + self.drag_offset[1], self)
