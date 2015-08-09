@@ -28,8 +28,9 @@ class OptionsMenu:
 				MAGIC_POTATO.set_full_screen(False)
 			else: MAGIC_POTATO.set_full_screen(True)
 		elif id == 'back':
-			pass
-			# self.next = 
+			# pass
+			from src.menus.TitleScene import TitleScene # because top of file didn't work
+			self.next = TitleScene()
 	
 	def render(self, screen, render_counter):
 		if self.bg != None:
