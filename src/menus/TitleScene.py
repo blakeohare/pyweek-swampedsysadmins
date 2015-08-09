@@ -2,6 +2,7 @@ import pygame
 from src.constants import *
 from src.ImageLibrary import IMAGES
 from src.FontEngine import TEXT
+from src.PlayScene import PlayScene
 
 class TitleScene:
 	def __init__(self):
@@ -12,9 +13,25 @@ class TitleScene:
 			'exit': [0] * 4
 		}
 		self.cursor = (0, 0)
+		self.currently_over = None
 	
 	def update(self, events, mouse_pos):
 		self.cursor = mouse_pos
+		
+		for event in events:
+			if event.mousedown:
+				if self.currently_over != None:
+					self.do_command(self.currently_over)
+	
+	def do_command(self, id):
+		if id == 'new_game':
+			self.next = PlayScene()
+		
+		elif id == 'options':
+			self.next = OptionsScene()
+		
+		elif id == 'exit':
+			self.next = None
 	
 	def render(self, screen, rc):
 		bg = IMAGES.get('menus/title.png')
@@ -25,6 +42,7 @@ class TitleScene:
 		y = GAME_HEIGHT // 2
 		x = GAME_WIDTH // 3
 		
+		current = None
 		for option in [
 			('New Game', 'new_game'),
 			('Options', 'options'),
@@ -35,7 +53,10 @@ class TitleScene:
 			button = self.buttons[id]
 			hover = mx > button[0] and mx < button[2] and my > button[1] and my < button[3]
 			
+			if hover:
+				current = id
+			
 			coords = TEXT.render(screen, label, 'white' if hover else 'gray', x, y)
 			self.buttons[id] = (x, y, coords[0], coords[1])
 			y += 30
-		
+		self.currently_over = current
