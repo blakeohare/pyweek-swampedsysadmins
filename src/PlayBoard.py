@@ -2,6 +2,7 @@ import pygame
 
 from src.Util import *
 from src.DragDescriptor import DragDescriptor
+from src.ImageLibrary import IMAGES
 
 class Tile:
 	def __init__(self, id, flags):
@@ -174,7 +175,10 @@ class PlayBoard:
 	def render(self, screen, rc, left_offset, top_offset, staff):
 		# will have to merge staff and doodads
 		
-		self.render_collision_hints(screen, left_offset, top_offset)
+		#self.render_collision_hints(screen, left_offset, top_offset)
+		
+		bg = IMAGES.get('the_room.png')
+		screen.blit(bg, (0, 0))
 		
 		render_list = []
 		for member in staff:
@@ -182,7 +186,7 @@ class PlayBoard:
 			if member.drag_path != None:
 				for dot in member.drag_path.get_marker_list(rc):
 					x, y = dot
-					render_list.append(('R', y * 1000000, x - 1, y - 1, 2, 2, (0, 255, 0)))
+					render_list.append(('R', y * 1000000, x - 1, y - 1, 2, 2, (255, 255, 0)))
 			
 			
 			
