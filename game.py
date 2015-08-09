@@ -4,10 +4,12 @@ import time
 from src.constants import *
 from src.menus.TitleScene import TitleScene
 from src.Event import Event
+from src.MagicPotato import MAGIC_POTATO
 
 def main():
 
 	pygame.init()
+	is_fullscreen = False
 	real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	virtual_screen = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
 	active_scene = TitleScene()
@@ -18,6 +20,13 @@ def main():
 		
 		begin = time.time()
 		
+		if MAGIC_POTATO.is_full_screen() != is_fullscreen:
+			is_fullscreen = MAGIC_POTATO.is_full_screen()
+			if is_fullscreen:
+				real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+			else:
+				real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+				
 		events = []
 		last_mouse_event = None
 		for e in pygame.event.get():

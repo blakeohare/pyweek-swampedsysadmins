@@ -3,6 +3,7 @@ from src.constants import *
 from src.ImageLibrary import IMAGES
 from src.FontEngine import TEXT
 from src.PlayScene import PlayScene
+from src.menus.OptionsMenu import OptionsMenu
 
 class TitleScene:
 	def __init__(self):
@@ -28,7 +29,7 @@ class TitleScene:
 			self.next = PlayScene()
 		
 		elif id == 'options':
-			self.next = OptionsScene()
+			self.next = OptionsMenu(None)
 		
 		elif id == 'exit':
 			self.next = None
