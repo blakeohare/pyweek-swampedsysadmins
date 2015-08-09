@@ -21,11 +21,11 @@ x	-
 
 RAW_OFFICE = """
 xxxxxxxxxxxxxxxxxxxx
+xxxxxxxxxxxxxxxxxxxx
 x......x...........x
 x......x...........x
 x..................x
 x..................x
-x......x...........x
 x......x...........x
 x......x...........x
 xxxxxxxx...........x
