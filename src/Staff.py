@@ -1,6 +1,8 @@
 import pygame
 import math
 
+from src.ImageLibrary import IMAGES
+
 VELOCITY = 1.5
 
 class Staff:
@@ -70,7 +72,9 @@ class Staff:
 				self.moving = True'''
 		
 	def render(self, rc, render_list):
-		img = self.TODO_remove_me # TODO images when Christine checks them in
+		
+		img = IMAGES.get('sprites/man0_' + self.direction + '0.png')
+		#img = self.TODO_remove_me # TODO images when Christine checks them in
 		
 		width, height = img.get_size()
 		
