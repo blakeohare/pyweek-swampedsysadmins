@@ -15,7 +15,7 @@ class Tile:
 	
 
 _TILE_MANIFEST = """
--	p
+.	p
 x	-
 """.strip()
 
@@ -23,8 +23,8 @@ RAW_OFFICE = """
 xxxxxxxxxxxxxxxxxxxx
 x......x...........x
 x......x...........x
-x......x...........x
-x......x...........x
+x..................x
+x..................x
 x......x...........x
 x......x...........x
 x......x...........x
@@ -91,13 +91,43 @@ class PlayBoard:
 					
 			elif event.mousemove:
 				if self.active_drag != None:
-					self.active_drag.add_point(event.x + self.drag_offset[0], event.y + self.drag_offset[1], self)
+					nx = event.x + self.drag_offset[0]
+					ny = event.y + self.drag_offset[1]
+					
+					px, py = self.active_drag.points[-1]
+					if self.is_line_segment_okay(px, py, nx, ny):
+						self.active_drag.add_point(nx, ny, self)
 		
 		
 		
 		for member in self.model.staff:
 			member.update(self)
 	
+	def is_line_segment_okay(self, start_x, start_y, end_x, end_y):
+		start_col = int(start_x // 32)
+		start_row = int(start_y // 32)
+		end_col = int(end_x // 32)
+		end_row = int(end_y // 32)
+		
+		if start_col == end_col and start_row == end_row:
+			return self.is_tile_okay(start_col, start_row)
+		if abs(end_row - start_row) + abs(end_col - start_col) == 1:
+			# only one differs by 1
+			return self.is_tile_okay(start_col, start_row) and self.is_tile_okay(end_col, end_row)
+		
+		mx = (start_x + end_x) // 2
+		my = (start_y + end_y) // 2
+		
+		return self.is_line_segment_okay(start_x, start_y, mx, my) and self.is_line_segment_okay(mx, my, end_x, end_y)
+	
+	def is_tile_okay(self, col, row):
+		if col < 0: return False
+		if row < 0: return False
+		if col >= office_width: return False
+		if row >= office_height: return False
+		tile = OFFICE[col][row]
+		if tile == None: return False
+		return tile.passable
 	def find_staff_member(self, x, y):
 		for member in self.model.staff:
 			left = member.x - 16
