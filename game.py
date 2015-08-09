@@ -19,19 +19,24 @@ def main():
 		begin = time.time()
 		
 		events = []
+		last_mouse_event = None
 		for e in pygame.event.get():
 			if e.type == pygame.MOUSEBUTTONDOWN:
 				mouse_pos = e.pos
 				x, y = mouse_pos
-				events.append(Event('mousedown', x, y, e.button == 1))
+				last_mouse_event = Event('mousedown', x, y, e.button == 1)
+				events.append(last_mouse_event)
+				
 			elif e.type == pygame.MOUSEBUTTONUP:
 				mouse_pos = e.pos
 				x, y = mouse_pos
-				events.append(Event('mouseup', x, y, e.button == 1))
+				last_mouse_event = Event('mouseup', x, y, e.button == 1)
+				events.append(last_mouse_event)
 			elif e.type == pygame.MOUSEMOTION:
 				mouse_pos = e.pos
 				x, y = mouse_pos
-				events.append(Event('mousemove', x, y, False))
+				last_mouse_event = Event('mousemove', x, y, False)
+				events.append(last_mouse_event)
 			elif e.type == pygame.QUIT:
 				return
 			elif e.type == pygame.KEYDOWN:
@@ -43,6 +48,9 @@ def main():
 					return
 				elif e.key == pygame.K_ESCAPE:
 					return
+		
+		if last_mouse_event != None:
+			mouse_pos = (last_mouse_event.x, last_mouse_event.y)
 		
 		active_scene.update(events, mouse_pos)
 		active_scene.render(virtual_screen, counter)
