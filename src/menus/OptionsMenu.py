@@ -13,10 +13,9 @@ class OptionsMenu:
 		}
 		self.cursor = (0, 0)
 		self.currently_over = None
-		print("fullscreen?",MAGIC_POTATO.is_full_screen())
 		
 	def update(self, events, mouse_coords):
-		self.cursor = pygame.mouse.get_pos()
+		self.cursor = mouse_coords
 		
 		for event in events:
 			if event.mousedown:
