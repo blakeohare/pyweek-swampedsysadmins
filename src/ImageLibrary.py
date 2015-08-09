@@ -29,7 +29,7 @@ class ImageLibrary:
 			actual.fill((255, 0, 255))
 			actual.blit(img, (0, 0))
 			
-			img = pygame.transform.scale2x(actual).convert()
+			img = pygame.transform.scale(actual, (actual.get_width() * 2, actual.get_height() * 2)).convert()
 			img.set_colorkey((255, 0, 255))
 			self.images[path] = img
 		return img
