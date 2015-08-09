@@ -1,6 +1,7 @@
 import pygame
 
 from src.Util import *
+from src.DragDescriptor import DragDescriptor
 
 class Tile:
 	def __init__(self, id, flags):
@@ -60,25 +61,78 @@ while y < office_height:
 	y += 1
 
 class PlayBoard:
-	def __init__(self):
+	def __init__(self, model):
 		self.grid = make_grid(10, 10)
+		self.selected = None
+		self.model = model
+		self.drag_descriptor = []
+		self.active_drag = None
+		self.drag_offset = None
+	
+	def update(self, events):
+		
+		for event in events:
+			if event.mousedown:
+				member = self.find_staff_member(event.x, event.y)
+				if member != None:
+					drag = DragDescriptor(member, event.x, event.y)
+					self.drag_descriptor.append(drag)
+					member.drag_path = drag
+					self.active_drag = drag
+					self.drag_offset = (member.x - event.x, member.y - event.y)
+			elif event.mouseup:
+				if self.active_drag != None:
+					self.active_drag = None
+			elif event.mousemove:
+				if self.active_drag != None:
+					self.active_drag.add_point(event.x + self.drag_offset[0], event.y + self.drag_offset[1], self)
+		
+		
+		
+		for member in self.model.staff:
+			member.update(self)
+	
+	def find_staff_member(self, x, y):
+		for member in self.model.staff:
+			left = member.x - 16
+			right = member.x + 16
+			top = member.y - 64
+			bottom = member.y
+			if x >= left and x <= right and y >= top and y <= bottom:
+				return member
+		return None
 	
 	def render(self, screen, rc, left_offset, top_offset, staff):
 		# will have to merge staff and doodads
 		
 		self.render_collision_hints(screen, left_offset, top_offset)
 		
-		images = []
+		render_list = []
 		for member in staff:
-			img = member.render(rc)
-			if img != None:
-				images.append(img)
+			member.render(rc, render_list)
+			if member.drag_path != None:
+				for dot in member.drag_path.get_marker_list(rc):
+					x, y = dot
+					render_list.append(('R', y * 1000000, x - 1, y - 1, 2, 2, (0, 255, 0)))
+			
+			
+			
+		render_list.sort(key = lambda x:x[1])
 		
-		images.sort(key = lambda x:x[2] * 100000 + x[1])
-		
-		for entity in images:
-			image, x, y = entity
-			screen.blit(image, (x + left_offset, y + top_offset))
+		for entity in render_list:
+			type = entity[0]
+			if type == 'I':
+				img = entity[2]
+				x = entity[3]
+				y = entity[4]
+				screen.blit(img, (x + left_offset, y + top_offset))
+			elif type == 'R':
+				x = entity[2]
+				y = entity[3]
+				w = entity[4]
+				h = entity[5]
+				color = entity[6]
+				pygame.draw.rect(screen, color, pygame.Rect(x, y, w, h))
 		
 	
 	def render_collision_hints(self, screen, left, top):
