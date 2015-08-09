@@ -11,7 +11,7 @@ def main():
 	pygame.init()
 	is_fullscreen = False
 	real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-	virtual_screen = pygame.Surface((GAME_WIDTH, GAME_HEIGHT))
+	virtual_screen = pygame.Surface((GAME_WIDTH, GAME_HEIGHT), pygame.RESIZABLE)
 	active_scene = TitleScene()
 	
 	mouse_pos = (0, 0)
@@ -23,7 +23,7 @@ def main():
 		if MAGIC_POTATO.is_full_screen() != is_fullscreen:
 			is_fullscreen = MAGIC_POTATO.is_full_screen()
 			if is_fullscreen:
-				real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+				real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN | pygame.RESIZABLE)
 			else:
 				real_screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 				
