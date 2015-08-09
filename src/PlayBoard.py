@@ -111,10 +111,43 @@ class PlayBoard:
 		
 		if start_col == end_col and start_row == end_row:
 			return self.is_tile_okay(start_col, start_row)
-		if abs(end_row - start_row) + abs(end_col - start_col) == 1:
-			# only one differs by 1
-			return self.is_tile_okay(start_col, start_row) and self.is_tile_okay(end_col, end_row)
 		
+		start_and_end_okay = self.is_tile_okay(start_col, start_row) and self.is_tile_okay(end_col, end_row)
+		if not start_and_end_okay:
+			return False
+		
+		d = abs(end_row - start_row) + abs(end_col - start_col)
+		if d == 1:
+			return True
+		if d == 2:
+			if start_x > end_x:
+				start_x, end_x = end_x, start_x
+				start_y, end_y = end_y, start_y
+				start_col, end_col = end_col, start_col
+				start_row, end_row = end_row, start_row
+			
+			dx = end_x - start_x
+			dy = end_y - start_y
+			
+			if dx == 0: # HOW?!?!?
+				return True
+			m = dy / dx
+			
+			if m == 1 or m == -1:
+				for x in [start_col, end_col]:
+					for y in [start_row, end_row]:
+						if not self.is_tile_okay(start_col, start_row):
+							return False
+				return True
+			to_next_x = start_col * 32 - start_x
+			y = m * to_next_x + start_y
+			row = int(y // 32)
+			if row == start_row:
+				return self.is_tile_okay(end_col, row)
+			else:
+				return self.is_tile_okay(start_col, row)
+			
+			
 		mx = (start_x + end_x) // 2
 		my = (start_y + end_y) // 2
 		
