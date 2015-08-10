@@ -9,6 +9,8 @@ class OptionsMenu:
 		self.bg = background_scene
 		self.buttons = {
 			'full_screen': [0] * 4,
+			'sfx_volume': [0] * 4,
+			'music_volume': [0] * 4,
 			'back': [0] * 4
 		}
 		self.cursor = (0, 0)
@@ -27,6 +29,10 @@ class OptionsMenu:
 			if MAGIC_POTATO.is_full_screen():
 				MAGIC_POTATO.set_full_screen(False)
 			else: MAGIC_POTATO.set_full_screen(True)
+		elif id == 'sfx_volume':
+			pass
+		elif id == 'music_volume':
+			pass
 		elif id == 'back':
 			# pass
 			from src.menus.TitleScene import TitleScene # because top of file didn't work
@@ -40,12 +46,16 @@ class OptionsMenu:
 		
 		mx, my = self.cursor
 		
-		y = GAME_HEIGHT // 2
-		x = GAME_WIDTH // 3
+		y = GAME_HEIGHT // 3
+		x = GAME_WIDTH // 4
+		
+		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(x * 2, y, 15, 15), 0 if MAGIC_POTATO.is_full_screen() else 1)
 		
 		current = None
 		for option in [
 			('Full Screen', 'full_screen'),
+			('SFX Volume', 'sfx_volume'),
+			('Music Volume', 'music_volume'),
 			('Back', 'back')
 			]:
 			
@@ -53,15 +63,12 @@ class OptionsMenu:
 			button = self.buttons[id]
 			hover = mx > button[0] and mx < button[2] and my > button[1] and my < button[3]
 			
-			color = 'gray'
-			if id == 'full_screen' and MAGIC_POTATO.is_full_screen(): ## until I figure out checkboxes.
-				color = 'blue'
-			
 			if hover:
 				current = id
-				color = 'white'
 			
-			coords = TEXT.render(screen, label, color, x, y)
+			# if id == 'sfx_volume':
+			
+			coords = TEXT.render(screen, label, 'white' if hover else 'gray', x, y)
 			self.buttons[id] = (x, y, coords[0], coords[1])
-			y += 30 ## what this?
+			y += 30
 		self.currently_over = current
