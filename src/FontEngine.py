@@ -2,7 +2,7 @@ import pygame
 from src.ImageLibrary import IMAGES
 from src.constants import *
 # These values are in the composite image generator
-LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\''
+LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\':0123456789'
 COLORS = 'white gray red orange yellow green blue purple'.split(' ')
 WIDTH = 7 * 2
 HEIGHT = 9 * 2

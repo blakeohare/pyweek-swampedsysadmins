@@ -52,6 +52,9 @@ class Session:
 	
 	def is_done(self):
 		return self.counter >= self.end and len(self.active_devices) == 0
+	
+	def is_iv_available(self):
+		return True
 		
 	def update(self, playboard):
 		

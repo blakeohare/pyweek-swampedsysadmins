@@ -9,22 +9,28 @@ class Tile:
 	def __init__(self, id, flags):
 		self.id = id
 		passable = False
+		self.denoted = False
 		for flag in list(flags):
 			if flag == 'p':
 				passable = True
+			elif flag == 'd':
+				self.denoted = True
+				
 		self.passable = passable
+		
 	
 	
 
 _TILE_MANIFEST = """
 .	p
 x	-
+i	d
 """.strip()
 
 RAW_OFFICE = """
 xxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxx
-x......x...........x
+xi.....x...........x
 x......x...........x
 x..................x
 x..................x
@@ -52,19 +58,44 @@ office_rows = RAW_OFFICE.split('\n')
 office_height = len(office_rows)
 office_width = len(office_rows[0])
 
-OFFICE = make_grid(office_width, office_height)
-y = 0
-while y < office_height:
-	x = 0
-	row = office_rows[y].strip().replace('@', ' ')
-	while x < office_width:
-		OFFICE[x][y] = TILE_MANIFEST.get(row[x], None)
-		x += 1
-	y += 1
+
+INTERESTING_COORDS = {}
+
+
+def build_office_map(session, interesting_coords_out):
+
+	interesting_coords = {}
+	output = make_grid(office_width, office_height)
+	y = 0
+	while y < office_height:
+		x = 0
+		row = office_rows[y].strip().replace('@', ' ')
+		while x < office_width:
+			id = row[x]
+			tile = TILE_MANIFEST.get(id, None)
+			if tile != None and tile.denoted:
+				interesting_coords[id] = (x, y)
+				tile = TILE_MANIFEST['.']
+			output[x][y] = tile
+			x += 1
+		y += 1
+	
+	blocking = TILE_MANIFEST['x']
+	for interesting in interesting_coords.keys():
+		if interesting == 'i':
+			if session.is_iv_available():
+				x, y = interesting_coords[interesting]
+				output[x][y] = blocking
+				output[x + 1][y] = blocking
+				interesting_coords_out['i'] = (x, y)
+	
+	return output
+			
 
 class PlayBoard:
 	def __init__(self, model):
-		self.grid = make_grid(10, 10)
+		self.interesting_coords = {}
+		self.office = build_office_map(model.session, self.interesting_coords)
 		self.selected = None
 		self.model = model
 		self.drag_descriptor = []
@@ -114,7 +145,7 @@ class PlayBoard:
 		while y <= 14:
 			x = 10
 			while x <= 18:
-				tile = OFFICE[x][y]
+				tile = self.office[x][y]
 				if tile != None and tile.passable:
 					potential.append((x, y))
 				x += 1
@@ -177,7 +208,7 @@ class PlayBoard:
 		if row < 0: return False
 		if col >= office_width: return False
 		if row >= office_height: return False
-		tile = OFFICE[col][row]
+		tile = self.office[col][row]
 		if tile == None: return False
 		return tile.passable
 	def find_staff_member(self, x, y):
@@ -209,7 +240,14 @@ class PlayBoard:
 		for device in self.model.session.active_devices:
 			device.render(rc, render_list)
 			
+		for key in self.interesting_coords.keys():
+			x, y = self.interesting_coords[key]
+			if key == 'i':
+				img = IMAGES.get('treatments/ivs_full.png')
+				render_list.append(('I', (y + 1) * 32 * 1000000, img, x * 32, (y + 1) * 32 - img.get_height()))
+			
 		render_list.sort(key = lambda x:x[1])
+		
 		
 		for entity in render_list:
 			type = entity[0]
@@ -228,14 +266,14 @@ class PlayBoard:
 		
 	
 	def render_collision_hints(self, screen, left, top):
-		width = len(OFFICE)
-		height = len(OFFICE[0])
+		width = len(self.office)
+		height = len(self.office[0])
 		
 		y = 0
-		while y < office_height:
+		while y < height:
 			x = 0
-			while x < office_width:
-				tile = OFFICE[x][y]
+			while x < width:
+				tile = self.office[x][y]
 				if tile != None:
 					color = (20, 20, 20) if tile.passable else (100, 100, 100)
 					pygame.draw.rect(screen, color, pygame.Rect(left + x * 32, top + y * 32, 32, 32))

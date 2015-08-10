@@ -1,6 +1,6 @@
 import pygame
 
-LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\''
+LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\':0123456789'
 
 BACKGROUND = (255, 0, 255)
 
@@ -24,7 +24,10 @@ filename_overrides = {
 	'-': 'hyphen',
 	',': 'comma',
 	"'": 'apostrophe',
+	':': 'colon',
 }
+for i in range(10):
+	filename_overrides[str(i)] = 'num' + str(i)
 
 images = {}
 
