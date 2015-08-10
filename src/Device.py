@@ -1,3 +1,5 @@
+import math
+
 from src.ImageLibrary import IMAGES
 
 FLYING_FRAMES = 30
@@ -36,25 +38,26 @@ class Device:
 					self.state = 'dead'
 		elif self.state == 'dead':
 			pass
-		elif self.state == 'ailing':
+		elif self.state == 'ailed':
 			pass
 		elif self.state == 'treated':
 			pass
 	
 	def render(self, rc, render_list):
-		img = None
-		if self.state == 'flying':
-			img = IMAGES.get('devices/' + self.device_type + '.png')
-		elif self.state == 'ailing':
-			img = IMAGES.get('devices/' + self.device_type + '.png')
+		sort_key = self.y * 1000000
 		
-		# TODO: all this
-		img = IMAGES.get('devices/' + self.device_type + '.png')
-		
-		py_offset = 0
 		if self.state == 'flying':
 			mid = FLYING_FRAMES // 2
 			zeroToOne = 1.0 - ((self.state_counter - mid) ** 2.0) / (mid ** 2.0)
 			py_offset = int(zeroToOne * 80)
-		render_list.append(('I', self.y * 1000000, img, self.x - img.get_width() // 2, self.y - img.get_height() - py_offset))
-	
+			self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y - py_offset)
+		elif self.state == 'ailed':
+			self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
+			ailment = IMAGES.get('devices/' + self.ailment + '.png')
+			py_offset = int(math.sin(3.14159 + self.state_counter * 2 * 3.14159 / 150) * 10 + 30)
+			self.draw_image(render_list, ailment, sort_key + 1, self.x, self.y - py_offset)
+		else:
+			self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
+		
+	def draw_image(self, rl, img, sort, x, y):
+		rl.append(('I', sort, img, x - img.get_width() // 2, y - img.get_height()))
