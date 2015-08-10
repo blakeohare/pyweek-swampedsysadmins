@@ -63,8 +63,7 @@ class OptionsMenu:
 		for i in [0, 200]: # end lines
 			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 30), (width_over_two + i, y + 45), 1)
 			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 60), (width_over_two + i, y + 75), 1)
-
-			
+		
 		sfx_vol = MAGIC_POTATO.get_sound_volume()
 		music_vol = MAGIC_POTATO.get_music_volume()
 		
