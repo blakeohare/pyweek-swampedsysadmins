@@ -10,6 +10,7 @@ class TitleScene:
 		self.next = None
 		self.buttons = {
 			'new_game': [0] * 4,
+			'tutorial': [0] * 4,
 			'options': [0] * 4,
 			'exit': [0] * 4
 		}
@@ -26,7 +27,10 @@ class TitleScene:
 	
 	def do_command(self, id):
 		if id == 'new_game':
-			self.next = PlayScene()
+			self.next = PlayScene(1)
+		
+		elif id == 'tutorial':
+			self.next = PlayScene(0)
 		
 		elif id == 'options':
 			self.next = OptionsMenu(None)
@@ -46,6 +50,7 @@ class TitleScene:
 		current = None
 		for option in [
 			('New Game', 'new_game'),
+			('Tutorial', 'tutorial'),
 			('Options', 'options'),
 			('Exit', 'exit')
 			]:
