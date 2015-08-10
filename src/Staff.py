@@ -21,7 +21,7 @@ class Staff:
 		self.move_please = False
 		self.drag_path = None
 		
-		self.velocity = 2.6
+		self.velocity = 5.0
 		
 		self.TODO_remove_me = pygame.Surface((32, 64)).convert()
 		self.TODO_remove_me.fill((0, 255, 255))
