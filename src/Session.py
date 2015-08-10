@@ -1,16 +1,6 @@
 import random
 
-class Device:
-	def __init__(self, game_time, device_type, x, y, ailment):
-		self.start = game_time
-		self.end = None
-		self.type = 'device'
-		self.device_type = device_type # { 'phone', 'tablet', 'laptop' }
-		self.x = x
-		self.y = y
-		self.ailment = ailment # { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
-		self.state = 'flying' # { 'flying', 'ailed', 'treated', 'new', 'dead' }
-		
+from src.Device import Device		
 
 class Session:
 	def __init__(self, level_id):
@@ -55,7 +45,7 @@ class Session:
 		self.events.sort(key = lambda x:x[1])
 	
 	def get_events_for_frame(self):
-		if len(self.events) > 0 and self.counter >= self.events[0][0]:
+		if len(self.events) > 0 and self.counter >= self.events[0][1]:
 			event = self.events.pop(0)
 			return event
 		return None
@@ -63,7 +53,7 @@ class Session:
 	def is_done(self):
 		return self.counter >= self.end and len(self.active_devices) == 0
 		
-	def update(self):
+	def update(self, playboard):
 		
 		event = self.get_events_for_frame()
 		
@@ -72,10 +62,13 @@ class Session:
 			if type == 'device':
 				device_type = event[2]
 				ailment = event[3]
-				device = Device(self.counter, device_type, 0, 0, ailment)
+				device = Device(playboard, self.counter, device_type, 200, 10, ailment)
 				self.devices.append(device)
 				self.active_devices.append(device)
 		
+		
+		for device in self.active_devices:
+			device.update()
 		
 		self.counter += 1
 	

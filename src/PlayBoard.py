@@ -1,4 +1,5 @@
 import pygame
+import random
 
 from src.Util import *
 from src.DragDescriptor import DragDescriptor
@@ -101,9 +102,26 @@ class PlayBoard:
 		
 		
 		
+		self.model.session.update(self)
+		
 		for member in self.model.staff:
 			member.update(self)
 	
+	def get_random_open_tile(self):
+		# this isn't called very often so it can be stupid and brute force
+		potential = []
+		y = 4
+		while y <= 14:
+			x = 10
+			while x <= 18:
+				tile = OFFICE[x][y]
+				if tile != None and tile.passable:
+					potential.append((x, y))
+				x += 1
+			y += 1
+		random.shuffle(potential)
+		return potential[0]
+		
 	def is_line_segment_okay(self, start_x, start_y, end_x, end_y):
 		start_col = int(start_x // 32)
 		start_row = int(start_y // 32)
@@ -188,7 +206,8 @@ class PlayBoard:
 					x, y = dot
 					render_list.append(('R', y * 1000000, x - 1, y - 1, 2, 2, (255, 255, 0)))
 			
-			
+		for device in self.model.session.active_devices:
+			device.render(rc, render_list)
 			
 		render_list.sort(key = lambda x:x[1])
 		
