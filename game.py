@@ -60,6 +60,8 @@ def main():
 					return
 				elif e.key == pygame.K_ESCAPE:
 					return
+				else:
+					events.append(Event('keydown', e.key, 0, False))
 			elif e.type == pygame.VIDEORESIZE:
 				w, h = e.size
 				SCREEN_SIZE[0] = w

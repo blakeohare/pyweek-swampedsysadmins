@@ -24,6 +24,13 @@ class TitleScene:
 			if event.mousedown:
 				if self.currently_over != None:
 					self.do_command(self.currently_over)
+			elif event.keydown:
+				if event.key == 'enter':
+					self.do_command('new_game')
+				elif event.key == 't':
+					self.do_command('tutorial')
+				elif event.key == 'o':
+					self.do_command('options')
 	
 	def do_command(self, id):
 		if id == 'new_game':
