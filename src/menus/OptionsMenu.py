@@ -47,9 +47,29 @@ class OptionsMenu:
 		mx, my = self.cursor
 		
 		y = GAME_HEIGHT // 3
-		x = GAME_WIDTH // 4
+		x = GAME_WIDTH // 5
 		
-		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(x * 2, y, 15, 15), 0 if MAGIC_POTATO.is_full_screen() else 1)
+		width_over_two = GAME_WIDTH // 2
+		
+		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two, y, 15, 15), 0 if MAGIC_POTATO.is_full_screen() else 1)
+		
+		pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two, y + 37), (width_over_two + 200, y + 37), 2)
+		pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two, y + 67), (width_over_two + 200, y + 67), 2)
+		
+		for i in [18, 36, 55, 73, 91, 109, 127, 145, 164, 182]: # ours goes to 11!
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 33), (width_over_two + i, y + 42), 1)
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 63), (width_over_two + i, y + 72), 1)
+		
+		for i in [0, 200]: # end lines
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 30), (width_over_two + i, y + 45), 1)
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 60), (width_over_two + i, y + 75), 1)
+
+			
+		sfx_vol = MAGIC_POTATO.get_sound_volume()
+		music_vol = MAGIC_POTATO.get_music_volume()
+		
+		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (sfx_vol * 2), y + 30), (width_over_two + (sfx_vol * 2), y + 45), 3)
+		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (music_vol * 2), y + 60), (width_over_two + (music_vol * 2), y + 75), 3)
 		
 		current = None
 		for option in [
