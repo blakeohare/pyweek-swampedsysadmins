@@ -6,8 +6,12 @@ FLYING_FRAMES = 30
 START_X = 400
 START_Y = 30
 
+ID_ALLOC = [1]
+
 class Device:
 	def __init__(self, playboard, game_time, device_type, x, y, ailment):
+		self.id = ID_ALLOC[0]
+		ID_ALLOC[0] += 1
 		self.start = game_time
 		self.end = None
 		self.type = 'device'

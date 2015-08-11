@@ -101,6 +101,7 @@ class PlayBoard:
 		self.drag_descriptor = []
 		self.active_drag = None
 		self.drag_offset = None
+		
 	
 	def update(self, events):
 		
@@ -137,6 +138,43 @@ class PlayBoard:
 		
 		for member in self.model.staff:
 			member.update(self)
+	
+	def get_hover_buttons(self):
+		iv_bin = self.interesting_coords.get('i', None)
+		
+		output = []
+		for staff in self.model.staff:
+			if iv_bin != None and staff.holding == None:
+				x, y = iv_bin
+				x += 1
+				y += 1
+				x *= 32
+				y *= 32
+				#print staff.x, staff.y, x, y
+				dx = staff.x - x
+				dy = staff.y - y
+				if dx ** 2 + dy ** 2 < 48 ** 2:
+					button = {
+						'id': 'iv_take_' + staff.id,
+						'label': 'Take IV',
+						'x': x,
+						'y': y - 50
+					}
+					#print button
+					output.append(button)
+			
+			if staff.holding != None:
+				for device in self.model.session.active_devices:
+					if abs(device.x - staff.x) < 32 and abs(device.y - staff.y) < 32:
+						if staff.holding == 'iv' and device.state == 'ailed' and device.ailment == 'sick':
+							output.append({
+								'id': 'device_treat_' + str(device.id) + "_" + str(staff.id),
+								'label': "Treat",
+								'x': device.x,
+								'y': device.y - 50
+							})
+		
+		return None if len(output) == 0 else output
 	
 	def get_random_open_tile(self):
 		# this isn't called very often so it can be stupid and brute force

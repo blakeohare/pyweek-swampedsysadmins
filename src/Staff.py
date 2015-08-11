@@ -21,6 +21,8 @@ class Staff:
 		self.move_please = False
 		self.drag_path = None
 		
+		self.holding = None
+		
 		self.velocity = 5.0
 		
 		self.TODO_remove_me = pygame.Surface((32, 64)).convert()
@@ -85,7 +87,12 @@ class Staff:
 		# Image: I, sort value, image, x, y
 		render_list.append(('I', self.y * 1000000 + self.x, img, px, py))
 		
-		if self.playboard != None and self.playboard.selected == self:
-			# Rectangle: R, sort value, 
-			render_list.append(('R', self.y * 1000000 + self.x - 1, px - 2, py - 2, img.get_width() + 4, img.get_height() + 4, (255, 255, 255)))
+		#if self.playboard != None and self.playboard.selected == self:
+		#	# Rectangle: R, sort value, 
+		#	render_list.append(('R', self.y * 1000000 + self.x - 1, px - 2, py - 2, img.get_width() + 4, img.get_height() + 4, (255, 255, 255)))
+	
+		if self.holding != None:
+			if self.holding == 'iv':
+				img = IMAGES.get('treatments/iv_bag.png')
+				render_list.append(('I', self.y * 1000000 + self.x + 1, img, self.x - img.get_width() // 2, self.y - 64 - img.get_height()))
 	
