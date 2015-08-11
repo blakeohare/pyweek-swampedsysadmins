@@ -8,6 +8,8 @@ START_Y = 30
 
 ID_ALLOC = [1]
 
+SICK_TREAT_TIME = 30 * 6
+
 class Device:
 	def __init__(self, playboard, game_time, device_type, x, y, ailment):
 		self.id = ID_ALLOC[0]
@@ -24,6 +26,10 @@ class Device:
 		
 		self.ailment = ailment # { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
 		self.state = 'flying' # { 'flying', 'ailed', 'treated', 'new', 'dead' }
+		self.state_counter = 0
+	
+	def start_treatment(self):
+		self.state = 'treated'
 		self.state_counter = 0
 	
 	def update(self):
@@ -45,7 +51,23 @@ class Device:
 		elif self.state == 'ailed':
 			pass
 		elif self.state == 'treated':
-			pass
+			if self.ailment == 'sick':
+				treat_time = SICK_TREAT_TIME
+			elif self.ailment == 'sad':
+				treat_time = SAD_TREAT_TIME
+			elif self.ailment == 'angry':
+				treat_time = ANGRY_TREAT_TIME
+			elif self.ailment == 'crazy':
+				treat_time = CRAZY_TREAT_TIME
+			elif self.ailment == 'dead':
+				treat_time = 9999999 # won't happen
+			elif self.ailment == 'unknown':
+				treat_time = UNKNOWN_TREAT_TIME
+			
+			if self.state_counter >= treat_time:
+				self.state = 'new'
+				self.state_counter = 0
+				# TODO: I think I just want to make the devices disappear when they're fixed.
 	
 	def render(self, rc, render_list):
 		sort_key = self.y * 1000000
@@ -60,8 +82,28 @@ class Device:
 			ailment = IMAGES.get('devices/' + self.ailment + '.png')
 			py_offset = int(math.sin(3.14159 + self.state_counter * 2 * 3.14159 / 150) * 10 + 30)
 			self.draw_image(render_list, ailment, sort_key + 1, self.x, self.y - py_offset)
+		elif self.state == 'treated':
+			if self.ailment == 'sick':
+				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
+				self.draw_image(render_list, IMAGES.get('treatments/iv_rack.png'), sort_key - 1, self.x - 16, self.y,)
+				treatment_time = 30 * 6
+				progress = 1.0 * self.state_counter / treatment_time
+				if progress > 1.0:
+					progress = 1.0
+			else:
+				raise Exception("No rendering code for ailment treatment.")
+			
+			width = 50
+			height = 8
+			x = self.x - 12
+			y = self.y + 8
+			self.draw_rectangle(render_list, sort_key, x, y, width, height, (100, 100, 100))
+			self.draw_rectangle(render_list, sort_key, x, y, int(width * progress), height, (0, 255, 0))
 		else:
 			self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
 		
 	def draw_image(self, rl, img, sort, x, y):
 		rl.append(('I', sort, img, x - img.get_width() // 2, y - img.get_height()))
+
+	def draw_rectangle(self, rl, sort, x, y, width, height, color):
+		rl.append(('R', sort, x, y, width, height, color))

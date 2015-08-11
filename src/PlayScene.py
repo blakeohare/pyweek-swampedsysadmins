@@ -57,12 +57,29 @@ class PlayScene:
 	def perform_hover_ui_click(self, id):
 		if id.startswith('iv_take_'):
 			if self.model.inventory_ivs > 0:
-				staff_member = id[len('iv_take_'):]
-				for member in self.model.staff:
-					if member.id == staff_member:
-						member.holding = 'iv'
-						self.model.inventory_ivs -= 1
-						return
+				staff_member = self.get_staff_member(id[len('iv_take_'):])
+				staff_member.holding = 'iv'
+				self.model.inventory_ivs -= 1
+				return
+		elif id.startswith('device_treat_'):
+			parts = id.split('_')
+			device = self.get_device(int(parts[2]))
+			staff = self.get_staff_member(parts[3])
+			if staff != None and device != None:
+				staff.holding = None
+				device.start_treatment()
+	
+	def get_device(self, id):
+		for device in self.model.session.active_devices:
+			if device.id == id:
+				return device
+		return None
+	
+	def get_staff_member(self, id):
+		for member in self.model.staff:
+			if member.id ==  id:
+				return member
+		return None
 	
 	def render_hover_ui(self, screen, rc):
 		buttons = self.board.get_hover_buttons() # { 'id': ..., 'label': ..., 'key':... 'x', 'y'}
