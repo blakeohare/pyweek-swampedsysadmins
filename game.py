@@ -10,11 +10,11 @@ def main():
 
 	pygame.init()
 	is_fullscreen = False
-	resizeable = 0 #pygame.RESIZABLE
+	resizeable = pygame.RESIZABLE
 	
-	real_screen = pygame.display.set_mode(SCREEN_SIZE)
+	real_screen = pygame.display.set_mode(SCREEN_SIZE, resizeable)
 	pygame.display.set_caption("Some Sysadmins")
-	virtual_screen = pygame.Surface((GAME_WIDTH, GAME_HEIGHT), resizeable)
+	virtual_screen = pygame.Surface((GAME_WIDTH, GAME_HEIGHT)).convert_alpha()
 	active_scene = TitleScene()
 	
 	mouse_pos = (0, 0)

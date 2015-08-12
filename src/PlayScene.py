@@ -3,6 +3,7 @@ import pygame
 from src.PlayBoard import PlayBoard
 from src.Model import Model
 from src.FontEngine import TEXT
+from src.menus.WrapperMenu import WrapperMenu
 
 class PlayScene:
 	def __init__(self, level_id):
@@ -16,6 +17,9 @@ class PlayScene:
 		
 		events = self.filter_hover_ui_events(events, mouse_coords)
 		self.board.update(events)
+		
+		if self.model.session.is_done():
+			self.next = WrapperMenu(self, self.model)
 	
 	def render(self, screen, rc):
 		screen.fill((0, 0, 0))

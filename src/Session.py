@@ -8,7 +8,16 @@ class Session:
 		self.laptops_fixed = 0
 		self.phones_fixed = 0
 		self.tablets_fixed = 0
+		
 		self.end = 30 * 60 * 2 # 2 minutes
+		self.device_count_override = None
+		
+		####### HACK TO SPEED THINGS UP ########
+		self.end = 30 * 3 # 5 seconds
+		self.device_count_override = 1
+		
+		
+		self.end 
 		self.devices = []
 		self.active_devices = []
 		self.level = level_id
@@ -26,8 +35,15 @@ class Session:
 			ailments *= 3 # reduce the probability that it will be dead on arrival
 			ailments.append('dead') 
 			
+		self.total_devices = 0
 		if self.level > 0:
 			total = 5 + 5 * self.level
+			
+			if self.device_count_override != None:
+				total = self.device_count_override
+			
+			
+			self.total_devices = total
 			types = ['laptop']
 			if self.level > 2: types.append('tablet')
 			if self.level > 4: types.append('phone')
@@ -52,7 +68,7 @@ class Session:
 	
 	def is_done(self):
 		return self.counter >= self.end and len(self.active_devices) == 0
-	
+		
 	def is_iv_available(self):
 		return True
 		
@@ -70,8 +86,15 @@ class Session:
 				self.active_devices.append(device)
 		
 		
+		new_active_devices = []
 		for device in self.active_devices:
 			device.update()
+			if device.state == 'new':
+				# TODO: add an animation for it to float up with a green checkmark
+				pass
+			else:
+				new_active_devices.append(device)
+		self.active_devices = new_active_devices
 		
 		self.counter += 1
 	

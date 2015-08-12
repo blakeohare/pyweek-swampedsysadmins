@@ -101,6 +101,7 @@ class PlayBoard:
 		self.drag_descriptor = []
 		self.active_drag = None
 		self.drag_offset = None
+		self.level_completed = False
 		
 	
 	def update(self, events):
@@ -138,6 +139,8 @@ class PlayBoard:
 		
 		for member in self.model.staff:
 			member.update(self)
+		
+		self.level_completed = self.model.session.is_done()
 	
 	def get_hover_buttons(self):
 		iv_bin = self.interesting_coords.get('i', None)
