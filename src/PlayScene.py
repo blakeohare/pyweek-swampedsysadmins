@@ -1,4 +1,5 @@
 import pygame
+import math
 
 from src.PlayBoard import PlayBoard
 from src.Model import Model
@@ -25,11 +26,41 @@ class PlayScene:
 		screen.fill((0, 0, 0))
 		
 		self.board.render(screen, rc, 0, 0, self.model.staff)
-		iv_count = self.model.inventory_ivs
 		
 		x = 8
-		y = 32 * 10
-		TEXT.render(screen, "IV'S: " + str(iv_count), 'blue', x, y)
+		y = 32 * 10 - 8
+		things = [
+			("Budget", 1000, 'white'),
+			("IV's", self.model.inventory_ivs, 'blue'),
+			("Cucumbers", self.model.inventory_cucumbers, 'green'),
+			('Tapes', self.model.inventory_tapes, 'gray'),
+			('Jackets', self.model.inventory_jackets, 'purple'),
+			('Laptops', self.model.inventory_laptops, 'white'),
+			('Phones', self.model.inventory_phones, 'white'),
+			('Tablets', self.model.inventory_tablets, 'white')
+		]
+		
+		
+		y_offset = int(abs(math.sin(rc * 2 * 3.14159 / 30)) * 3)
+		first = True
+		for thing in things:
+			prefix = ''
+			if first:
+				prefix = '$'
+			
+			count = thing[1]
+			label = thing[0] + ': ' + prefix + str(count)
+			color = thing[2]
+			yo = 0
+			if count < 2:
+				color = 'red'
+				if count < 1:
+					yo = -y_offset
+			TEXT.render(screen, label, color, x, y + yo)
+			y += 18
+			if first:
+				first = False
+				y += 15
 		
 		self.render_hover_ui(screen, rc)
 	

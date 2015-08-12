@@ -26,6 +26,7 @@ class Device:
 		
 		self.ailment = ailment # { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
 		self.state = 'flying' # { 'flying', 'ailed', 'treated', 'new', 'dead' }
+		self.resolution = None
 		self.state_counter = 0
 	
 	def start_treatment(self):
@@ -47,7 +48,7 @@ class Device:
 				if self.ailment == 'dead':
 					self.state = 'dead'
 		elif self.state == 'dead':
-			pass
+			self.resolution = 'replaced' # TODO: this needs to be dependent on whether you have enough reserves
 		elif self.state == 'ailed':
 			pass
 		elif self.state == 'treated':
@@ -66,6 +67,7 @@ class Device:
 			
 			if self.state_counter >= treat_time:
 				self.state = 'new'
+				self.resolution = 'treated'
 				self.state_counter = 0
 				# TODO: I think I just want to make the devices disappear when they're fixed.
 	
