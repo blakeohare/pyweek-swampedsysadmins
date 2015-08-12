@@ -102,6 +102,7 @@ class PlayBoard:
 		self.active_drag = None
 		self.drag_offset = None
 		self.level_completed = False
+		self.animations = []
 		
 	
 	def update(self, events):
@@ -286,7 +287,26 @@ class PlayBoard:
 			if key == 'i':
 				img = IMAGES.get('treatments/ivs_full.png')
 				render_list.append(('I', (y + 1) * 32 * 1000000, img, x * 32, (y + 1) * 32 - img.get_height()))
+		
+		new_animations = []
+		for animation in self.animations:
+			images = []
+			if animation['type'] == 'device':
+				images.append(IMAGES.get('devices/' + animation['device'] + '.png'))
+				images.append(IMAGES.get('devices/' + animation['overlay'] + '.png'))
+			ttl = animation['ttl']
+			ttl -= 1
+			animation['ttl'] = ttl
 			
+			for img in images:
+				render_list.append(('I', animation['mx'] + animation['my'] * 1000000, img, animation['x'] - img.get_width() // 2, animation['y'] - img.get_height()))
+				
+			animation['x'] += animation['vx']
+			animation['y'] += animation['vy']
+			
+			if ttl > 0:
+				new_animations.append(animation)
+		self.animations = new_animations
 		render_list.sort(key = lambda x:x[1])
 		
 		

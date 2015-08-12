@@ -47,6 +47,7 @@ class Device:
 				self.state_counter = 0
 				if self.ailment == 'dead':
 					self.state = 'dead'
+					self.resolve_dead_device()
 		elif self.state == 'dead':
 			self.resolution = 'replaced' # TODO: this needs to be dependent on whether you have enough reserves
 		elif self.state == 'ailed':
@@ -69,7 +70,28 @@ class Device:
 				self.state = 'new'
 				self.resolution = 'treated'
 				self.state_counter = 0
-				# TODO: I think I just want to make the devices disappear when they're fixed.
+	
+	def resolve_dead_device(self):
+		model = self.playboard.model
+		if self.type == 'laptop':
+			if model.inventory_laptops > 0:
+				self.resolution = 'replaced'
+				model.inventory_laptops -= 1
+			else:
+				self.resolution = 'ordered'
+		elif self.type == 'phone':
+			if model.inventory_phones > 0:
+				self.resolution = 'replaced'
+				model.inventory_phones -= 1
+			else:
+				self.resolution = 'ordered'
+		elif self.type == 'tablet':
+			if model.inventory_tablets > 0:
+				self.resolution = 'replaced'
+				model.inventory_tablets -= 1
+			else:
+				self.resolution = 'ordered'
+		
 	
 	def render(self, rc, render_list):
 		sort_key = self.y * 1000000

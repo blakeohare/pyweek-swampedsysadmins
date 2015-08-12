@@ -14,7 +14,7 @@ class Session:
 		
 		####### HACK TO SPEED THINGS UP ########
 		self.end = 30 * 3 # 5 seconds
-		self.device_count_override = 1
+		self.device_count_override = 3
 		
 		
 		self.end 
@@ -90,8 +90,19 @@ class Session:
 		for device in self.active_devices:
 			device.update()
 			if device.state == 'new':
-				# TODO: add an animation for it to float up with a green checkmark
-				pass
+				playboard.animations.append({
+					'type': 'device',
+					'ttl': 10,
+					'mx': device.x,
+					'my': device.y,
+					'x': device.x,
+					'y': device.y,
+					'device': device.device_type,
+					'overlay': 'check',
+					'vx': 0,
+					'vy': -3
+				})
+				
 			else:
 				new_active_devices.append(device)
 		self.active_devices = new_active_devices

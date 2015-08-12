@@ -19,6 +19,8 @@ class WrapperMenu:
 		self.next = None
 		self.bg = bg
 		self.model = model
+		self.session = model.session
+		self.devices = model.session.devices
 		self.score_menu = ScoreMenu(self, model)
 		self.graph_menu = GraphMenu(self, model)
 		self.hiring_menu = HiringMenu(self, model)
