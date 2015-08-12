@@ -14,7 +14,7 @@ class Session:
 		
 		####### HACK TO SPEED THINGS UP ########
 		self.end = 30 * 3 # 5 seconds
-		self.device_count_override = 3
+		self.device_count_override = 1
 		
 		
 		self.end 

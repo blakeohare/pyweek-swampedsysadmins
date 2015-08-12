@@ -6,6 +6,8 @@ class HiringMenu:
 		self.model = model
 		self.elements = None
 		self.parent = wrapper_menu
+		self.tab = 'HR'
+		self.color = (40, 40, 140)
 	
 	def get_ui_elements(self):
 		if self.elements == None:

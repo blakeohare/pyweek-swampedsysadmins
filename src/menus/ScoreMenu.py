@@ -6,6 +6,8 @@ class ScoreMenu:
 		self.model = model
 		self.elements = None
 		self.parent = wrapper_menu
+		self.tab = 'Report'
+		self.color = (40, 40, 40)
 	
 	def get_ui_elements(self):
 		if self.elements == None:

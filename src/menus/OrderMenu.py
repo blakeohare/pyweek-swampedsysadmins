@@ -6,6 +6,8 @@ class OrderMenu:
 		self.model = model
 		self.elements = None
 		self.parent = wrapper_menu
+		self.tab = 'Stock'
+		self.color = (140, 40, 40)
 	
 	def get_ui_elements(self):
 		if self.elements == None:

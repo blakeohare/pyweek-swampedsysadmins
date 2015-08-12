@@ -1,3 +1,5 @@
+import pygame
+
 from src.FontEngine import TEXT
 
 class UiElement:
@@ -22,7 +24,7 @@ class UiElement:
 			pygame.draw.rect(screen, bg_color, pygame.Rect(offset_x + self.x, offset_y + self.y, self.width, self.height))
 			
 			color = 'white' if is_enabled else 'gray'
-			TEXT.render(screen, color, offset_x + self.text_x, offset_y + self.text_y)
+			TEXT.render(screen, self.text, color, offset_x + self.text_x, offset_y + self.text_y)
 		else:
 			raise Exception("Not implemented.")
 
@@ -41,8 +43,8 @@ def create_ui_button(text, function, x, y, width, height, is_enabled_lambda):
 	button.right = x + width
 	button.bottom = y + height
 	button.text = text
-	button.text_x = self.x + (width - len(text) * 16) // 2
-	button.text_y = self.y + (height - 16) // 2
+	button.text_x = button.x + (width - len(text) * 16) // 2
+	button.text_y = button.y + (height - 16) // 2
 	return button
 
 def create_ui_text(text, color, x, y):
