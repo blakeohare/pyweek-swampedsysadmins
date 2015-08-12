@@ -83,6 +83,7 @@ class PlayScene:
 					if x >= button[0] and x <= button[2] and y >= button[1] and y <= button[3]:
 						self.perform_hover_ui_click(button[4])
 						handled = True
+						break
 				if not handled:
 					filtered_events.append(event)
 			else:
