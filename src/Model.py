@@ -3,7 +3,7 @@ from src.Session import Session
 
 class Model:
 	def __init__(self, starting_level):
-		self.staff = [Staff('simon')]
+		self.staff = [Staff('man0'), Staff('woman0')]
 		self.session = Session(starting_level) # 0 for tutorial
 		
 		self.inventory_ivs = 15

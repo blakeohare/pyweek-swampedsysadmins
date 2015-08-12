@@ -75,7 +75,7 @@ class Staff:
 		
 	def render(self, rc, render_list):
 		
-		img = IMAGES.get('sprites/man0_' + self.direction + '0.png')
+		img = IMAGES.get('sprites/'+self.id+'_' + self.direction + '0.png')
 		#img = self.TODO_remove_me # TODO images when Christine checks them in
 		
 		width, height = img.get_size()
