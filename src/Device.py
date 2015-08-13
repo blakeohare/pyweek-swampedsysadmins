@@ -1,4 +1,5 @@
 import math
+import random
 
 from src.ImageLibrary import IMAGES
 
@@ -12,8 +13,9 @@ SICK_TREAT_TIME = 30 * 6
 SAD_TREAT_TIME = 30 * 7
 ANGRY_TREAT_TIME = 30 * 8
 CRAZY_TREAT_TIME = 30 * 9
+UNKNOWN_TREAT_TIME = 30 * 6
 
-
+AILMENTS = 'sick sad angry crazy'.split(' ')
 
 class Device:
 	def __init__(self, playboard, game_time, device_type, x, y, ailment):
@@ -30,9 +32,12 @@ class Device:
 		self.landing_y = self.landing_y * 32 + 16
 		
 		self.ailment = ailment # { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
+		self.actual_ailment = random.choice(AILMENTS)
+		self.unknown_discovery_counter = 0
 		self.state = 'flying' # { 'flying', 'ailed', 'treated', 'new', 'dead' }
 		self.resolution = None
 		self.state_counter = 0
+		self.playboard = playboard
 	
 	def start_treatment(self):
 		self.state = 'treated'
@@ -56,7 +61,15 @@ class Device:
 		elif self.state == 'dead':
 			self.resolution = 'replaced' # TODO: this needs to be dependent on whether you have enough reserves
 		elif self.state == 'ailed':
-			pass
+			if self.ailment == 'unknown':
+				for staff in self.playboard.model.staff:
+					dx = staff.x - self.x
+					dy = staff.y - self.y
+					if dx ** 2 + dy ** 2 < 32 ** 2:
+						self.unknown_discovery_counter += 1
+			
+				if self.unknown_discovery_counter >= UNKNOWN_TREAT_TIME:
+					self.ailment = self.actual_ailment
 		elif self.state == 'treated':
 			if self.ailment == 'sick':
 				treat_time = SICK_TREAT_TIME
@@ -101,6 +114,8 @@ class Device:
 	def render(self, rc, render_list):
 		sort_key = self.y * 1000000
 		
+		progress_bar = None
+		
 		if self.state == 'flying':
 			mid = FLYING_FRAMES // 2
 			zeroToOne = 1.0 - ((self.state_counter - mid) ** 2.0) / (mid ** 2.0)
@@ -111,32 +126,52 @@ class Device:
 			ailment = IMAGES.get('devices/' + self.ailment + '.png')
 			py_offset = int(math.sin(3.14159 + self.state_counter * 2 * 3.14159 / 150) * 10 + 30)
 			self.draw_image(render_list, ailment, sort_key + 1, self.x, self.y - py_offset)
+			
+			if self.ailment == 'unknown' and self.unknown_discovery_counter > 0:
+				progress_bar = [
+					(0, 128, 255),
+					self.unknown_discovery_counter,
+					UNKNOWN_TREAT_TIME
+				]
 		elif self.state == 'treated':
 			if self.ailment == 'sick':
+				treatment_time = SICK_TREAT_TIME
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
 				self.draw_image(render_list, IMAGES.get('treatments/iv_rack.png'), sort_key - 1, self.x - 16, self.y,)
 			elif self.ailment == 'sad':
+				treatment_time = SAD_TREAT_TIME
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_cucumber.png'), sort_key, self.x, self.y)
 			elif self.ailment == 'angry':
+				treatment_time = ANGRY_TREAT_TIME
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_headphones.png'), sort_key, self.x, self.y)
 			elif self.ailment == 'crazy':
+				treatment_time = CRAZY_TREAT_TIME
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_straightjacket.png'), sort_key, self.x, self.y)
 			else:
 				raise Exception("No rendering code for ailment treatment.")
 			
-			treatment_time = 30 * 6
-			progress = 1.0 * self.state_counter / treatment_time
+			progress_bar = [
+				(0, 255, 0),
+				self.state_counter,
+				treatment_time
+			]
+		else:
+			self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
+
+		if progress_bar != None:
+			numerator = progress_bar[1]
+			treatment_time = progress_bar[2]
+			color = progress_bar[0]
+			progress = 1.0 * numerator / treatment_time
 			if progress > 1.0:
 				progress = 1.0
-				
+			
 			width = 50
 			height = 8
 			x = self.x - 12
 			y = self.y + 8
 			self.draw_rectangle(render_list, sort_key, x, y, width, height, (100, 100, 100))
-			self.draw_rectangle(render_list, sort_key, x, y, int(width * progress), height, (0, 255, 0))
-		else:
-			self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
+			self.draw_rectangle(render_list, sort_key, x, y, int(width * progress), height, color)
 		
 	def draw_image(self, rl, img, sort, x, y):
 		rl.append(('I', sort, img, x - img.get_width() // 2, y - img.get_height()))
