@@ -7,9 +7,12 @@ from src.FontEngine import TEXT
 from src.menus.WrapperMenu import WrapperMenu
 
 class PlayScene:
-	def __init__(self, level_id):
+	def __init__(self, level_id, model = None):
 		self.next = None
-		self.model = Model(level_id)
+		if model == None:
+			self.model = Model(level_id)
+		else:
+			self.model = model
 		self.board = PlayBoard(self.model)
 		self.hover_buttons = None
 		self.active_button = None

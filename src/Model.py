@@ -16,4 +16,6 @@ class Model:
 		self.inventory_tablets = 3
 		
 		
-	
+	def increment_level(self):
+		level_id = self.session.level + 1
+		self.session = Session(level_id)

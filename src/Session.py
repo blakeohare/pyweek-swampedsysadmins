@@ -17,7 +17,6 @@ class Session:
 		self.device_count_override = 1
 		
 		
-		self.end 
 		self.devices = []
 		self.active_devices = []
 		self.level = level_id
@@ -59,6 +58,7 @@ class Session:
 				random.shuffle(ailments)
 				self.events.append(('device', t, types[i], ailments[0]))
 		self.events.sort(key = lambda x:x[1])
+		self.staff_randomized = False
 	
 	def get_events_for_frame(self):
 		if len(self.events) > 0 and self.counter >= self.events[0][1]:
@@ -73,6 +73,13 @@ class Session:
 		return True
 		
 	def update(self, playboard):
+		
+		if not self.staff_randomized:
+			for staff in playboard.model.staff:
+				x, y = playboard.get_random_open_tile()
+				staff.x = x * 32 + 16
+				staff.y = y * 32 + 16
+			self.staff_randomized = True
 		
 		event = self.get_events_for_frame()
 		

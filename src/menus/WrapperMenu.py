@@ -96,4 +96,6 @@ class WrapperMenu:
 			element.render(screen, MENU_LEFT, MENU_TOP, self.mouse_xy, rc)
 	
 	def okidoke(self):
-		pass #print "Okidoke"
+		from src.PlayScene import PlayScene
+		self.model.increment_level()
+		self.next = PlayScene(None, self.model)
