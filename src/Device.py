@@ -110,13 +110,20 @@ class Device:
 			if self.ailment == 'sick':
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '.png'), sort_key, self.x, self.y)
 				self.draw_image(render_list, IMAGES.get('treatments/iv_rack.png'), sort_key - 1, self.x - 16, self.y,)
-				treatment_time = 30 * 6
-				progress = 1.0 * self.state_counter / treatment_time
-				if progress > 1.0:
-					progress = 1.0
+			elif self.ailment == 'sad':
+				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_cucumber.png'), sort_key, self.x, self.y)
+			elif self.ailment == 'angry':
+				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_headphones.png'), sort_key, self.x, self.y)
+			elif self.ailment == 'crazy':
+				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_jacket.png'), sort_key, self.x, self.y)
 			else:
 				raise Exception("No rendering code for ailment treatment.")
 			
+			treatment_time = 30 * 6
+			progress = 1.0 * self.state_counter / treatment_time
+			if progress > 1.0:
+				progress = 1.0
+				
 			width = 50
 			height = 8
 			x = self.x - 12

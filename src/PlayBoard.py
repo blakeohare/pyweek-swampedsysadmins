@@ -25,17 +25,20 @@ _TILE_MANIFEST = """
 .	p
 x	-
 i	d
+j	d
+t	d
+c	d
 """.strip()
 
 RAW_OFFICE = """
 xxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxx
-xi.....x...........x
+xi.c.t.x...........x
 x......x...........x
 x..................x
 x..................x
 x......x...........x
-x......x...........x
+x....j.x...........x
 xxxxxxxx...........x
 @      x...........x
 @      x...........x
@@ -88,6 +91,24 @@ def build_office_map(session, interesting_coords_out):
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
 				interesting_coords_out['i'] = (x, y)
+		elif interesting == 'c':
+			if session.is_cucumber_available():
+				x, y = interesting_coords[interesting]
+				output[x][y] = blocking
+				output[x + 1][y] = blocking
+				interesting_coords_out['c'] = (x, y)
+		elif interesting == 't':
+			if session.is_tape_available():
+				x, y = interesting_coords[interesting]
+				output[x][y] = blocking
+				output[x + 1][y] = blocking
+				interesting_coords_out['t'] = (x, y)
+		elif interesting == 'j':
+			if session.is_jacket_available():
+				x, y = interesting_coords[interesting]
+				output[x][y] = blocking
+				output[x + 1][y] = blocking
+				interesting_coords_out['j'] = (x, y)
 	
 	return output
 			
@@ -145,6 +166,9 @@ class PlayBoard:
 	
 	def get_hover_buttons(self):
 		iv_bin = self.interesting_coords.get('i', None)
+		cuc_bin = self.interesting_coords.get('c', None)
+		tape_bin = self.interesting_coords.get('t', None)
+		jacket_bin = self.interesting_coords.get('j', None)
 		
 		output = []
 		for staff in self.model.staff:
@@ -154,7 +178,6 @@ class PlayBoard:
 				y += 1
 				x *= 32
 				y *= 32
-				#print staff.x, staff.y, x, y
 				dx = staff.x - x
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
@@ -164,7 +187,57 @@ class PlayBoard:
 						'x': x,
 						'y': y - 50
 					}
-					#print button
+					output.append(button)
+					
+			if cuc_bin != None and staff.holding == None:
+				x, y = cuc_bin
+				x += 1
+				y += 1
+				x *= 32
+				y *= 32
+				dx = staff.x - x
+				dy = staff.y - y
+				if dx ** 2 + dy ** 2 < 48 ** 2:
+					button = {
+						'id': 'cuc_take_' + staff.id,
+						'label': 'Take Cucumbers',
+						'x': x,
+						'y': y - 50
+					}
+					output.append(button)
+				
+			if tape_bin != None and staff.holding == None:
+				x, y = tape_bin
+				x += 1
+				y += 1
+				x *= 32
+				y *= 32
+				dx = staff.x - x
+				dy = staff.y - y
+				if dx ** 2 + dy ** 2 < 48 ** 2:
+					button = {
+						'id': 'tape_take_' + staff.id,
+						'label': 'Pick Tape',
+						'x': x,
+						'y': y - 50
+					}
+					output.append(button)
+				
+			if jacket_bin != None and staff.holding == None:
+				x, y = jacket_bin
+				x += 1
+				y += 1
+				x *= 32
+				y *= 32
+				dx = staff.x - x
+				dy = staff.y - y
+				if dx ** 2 + dy ** 2 < 48 ** 2:
+					button = {
+						'id': 'jacket_take_' + staff.id,
+						'label': 'Take Jacket',
+						'x': x,
+						'y': y - 50
+					}
 					output.append(button)
 			
 			if staff.holding != None:
@@ -284,10 +357,25 @@ class PlayBoard:
 			
 		for key in self.interesting_coords.keys():
 			x, y = self.interesting_coords[key]
+			
 			if key == 'i':
-				img = IMAGES.get('treatments/ivs_full.png')
-				render_list.append(('I', (y + 1) * 32 * 1000000, img, x * 32, (y + 1) * 32 - img.get_height()))
-		
+				file = 'ivs'
+				has_any = self.model.inventory_ivs > 0
+			elif key == 'c':
+				file = 'cucumber_station'
+				has_any = self.model.inventory_cucumbers > 0
+				x += .3
+			elif key == 't':
+				file = 'tape_shelf'
+				has_any = self.model.inventory_tapes > 0
+			elif key == 'j':
+				file = 'jacket_rack'
+				has_any = self.model.inventory_jackets > 0
+			
+			path = 'treatments/' + file + '_' + ('full' if has_any else 'empty') + '.png'
+			img = IMAGES.get(path)
+			render_list.append(('I', (y + 1) * 32 * 1000000, img, int(x * 32), (y + 1) * 32 - img.get_height()))
+			
 		new_animations = []
 		for animation in self.animations:
 			images = []

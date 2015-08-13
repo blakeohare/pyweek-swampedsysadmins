@@ -9,12 +9,18 @@ class Session:
 		self.phones_fixed = 0
 		self.tablets_fixed = 0
 		
+		IS_DEBUG = True
+		
 		self.end = 30 * 60 * 2 # 2 minutes
 		self.device_count_override = None
+		self.required_events = []
 		
 		####### HACK TO SPEED THINGS UP ########
-		self.end = 30 * 3 # 5 seconds
-		self.device_count_override = 1
+		if IS_DEBUG:
+			self.end = 30 * 3 # 5 seconds
+			self.required_events = ['sad', 'angry', 'sick', 'crazy', 'unknown']
+			self.device_count_override = len(self.required_events)
+			
 		
 		
 		self.devices = []
@@ -57,6 +63,12 @@ class Session:
 				t = int(self.end * t)
 				random.shuffle(ailments)
 				self.events.append(('device', t, types[i], ailments[0]))
+		
+		for event in self.required_events:
+			devices = 'phone tablet laptop'.split(' ')
+			random.shuffle(devices)
+			self.events = [('device', 0, devices[0], event)] + self.events
+		
 		self.events.sort(key = lambda x:x[1])
 		self.staff_randomized = False
 	
@@ -70,6 +82,15 @@ class Session:
 		return self.counter >= self.end and len(self.active_devices) == 0
 		
 	def is_iv_available(self):
+		return True
+	
+	def is_cucumber_available(self):
+		return True
+	
+	def is_tape_available(self):
+		return True
+	
+	def is_jacket_available(self):
 		return True
 		
 	def update(self, playboard):

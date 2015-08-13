@@ -8,7 +8,6 @@ class Model:
 		
 		self.inventory_ivs = 15
 		self.inventory_cucumbers = 5
-		self.inventory_towels = 5
 		self.inventory_tapes = 5
 		self.inventory_jackets = 5
 		self.inventory_laptops = 3

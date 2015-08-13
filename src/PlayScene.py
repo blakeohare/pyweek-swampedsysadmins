@@ -100,6 +100,24 @@ class PlayScene:
 				staff_member.holding = 'iv'
 				self.model.inventory_ivs -= 1
 				return
+		elif id.startswith('cuc_take_'):
+			if self.model.inventory_cucumbers > 0:
+				staff_member = self.get_staff_member(id[len('cuc_take_'):])
+				staff_member.holding = 'cucumber'
+				self.model.inventory_cucumbers -= 1
+				return
+		elif id.startswith('tape_take_'):
+			if self.model.inventory_tapes > 0:
+				staff_member = self.get_staff_member(id[len('tape_take_'):])
+				staff_member.holding = 'tape'
+				self.model.inventory_tapes -= 1
+				return
+		elif id.startswith('jacket_take_'):
+			if self.model.inventory_tapes > 0:
+				staff_member = self.get_staff_member(id[len('jacket_take_'):])
+				staff_member.holding = 'jacket'
+				self.model.inventory_tapes -= 1
+				return
 		elif id.startswith('device_treat_'):
 			parts = id.split('_')
 			device = self.get_device(int(parts[2]))

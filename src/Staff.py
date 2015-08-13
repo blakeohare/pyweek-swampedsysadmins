@@ -94,5 +94,15 @@ class Staff:
 		if self.holding != None:
 			if self.holding == 'iv':
 				img = IMAGES.get('treatments/iv_bag.png')
-				render_list.append(('I', self.y * 1000000 + self.x + 1, img, self.x - img.get_width() // 2, self.y - 64 - img.get_height()))
+			elif self.holding == 'cucumber':
+				img = IMAGES.get('treatments/cucumber.png')
+			elif self.holding == 'tape':
+				img = IMAGES.get('treatments/tape.png')
+			elif self.holding == 'jacket':
+				img = IMAGES.get('treatments/jacket.png')
+			else:
+				raise Exception("Invalid item holding." + self.holding)
+				
+			render_list.append(('I', self.y * 1000000 + self.x + 1, img, self.x - img.get_width() // 2, self.y - 64 - img.get_height()))
+				
 	
