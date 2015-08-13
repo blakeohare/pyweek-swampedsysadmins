@@ -8,22 +8,15 @@ class OptionsMenu:
 	def __init__(self, background_scene):
 		self.next = None
 		self.bg = background_scene
+		self.buttons = {
+			'full_screen': [0] * 4,
+			'sfx_volume': [0] * 4,
+			'music_volume': [0] * 4,
+			'back': [0] * 4
+		}
 		if self.bg != None:
-			self.buttons = {
-				'full_screen': [0] * 4,
-				'sfx_volume': [0] * 4,
-				'music_volume': [0] * 4,
-				'back': [0] * 4,
-				'main_menu': [0] * 4
-			}
+			self.buttons.update({'main_menu': [0] * 4})
 
-		else:
-			self.buttons = {
-				'full_screen': [0] * 4,
-				'sfx_volume': [0] * 4,
-				'music_volume': [0] * 4,
-				'back': [0] * 4
-			}
 		self.cursor = (0, 0)
 		self.currently_over = None
 		
@@ -45,8 +38,11 @@ class OptionsMenu:
 		elif id == 'music_volume':
 			pass
 		elif id == 'back':
-			# pass
-			self.next = self.bg
+			if len(self.buttons) == 5:
+				self.next = self.bg
+			else: 
+				from src.menus.TitleScene import TitleScene # because top of file didn't work
+				self.next = TitleScene()
 		elif id == 'main_menu':
 			from src.menus.TitleScene import TitleScene # because top of file didn't work
 			self.next = TitleScene()
@@ -54,6 +50,9 @@ class OptionsMenu:
 	def render(self, screen, render_counter):
 		if self.bg != None:
 			self.bg.render(screen, render_counter)
+		
+		if self.bg == None:
+			screen.fill((0,0,0))
 		
 		draw_alpha_rectangle(screen, 0, 0, GAME_WIDTH, GAME_HEIGHT, 40, 40, 40, 70)
 		
@@ -84,12 +83,11 @@ class OptionsMenu:
 		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (music_vol * 2), y + 60), (width_over_two + (music_vol * 2), y + 75), 3)
 		
 		current = None
-		for option in [
-			('Full Screen', 'full_screen'),
-			('SFX Volume', 'sfx_volume'),
-			('Music Volume', 'music_volume'),
-			('Back', 'back')
-			]:
+		
+		options = [('Full Screen', 'full_screen'),('SFX Volume', 'sfx_volume'),('Music Volume', 'music_volume'),('Back', 'back')]
+		if len(self.buttons) == 5: options.append(('Return to Main Menu','main_menu'))
+		
+		for option in options:
 			
 			label, id = option
 			button = self.buttons[id]
