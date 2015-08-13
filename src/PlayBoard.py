@@ -242,14 +242,16 @@ class PlayBoard:
 			
 			if staff.holding != None:
 				for device in self.model.session.active_devices:
-					if abs(device.x - staff.x) < 32 and abs(device.y - staff.y) < 32:
-						if staff.holding == 'iv' and device.state == 'ailed' and device.ailment == 'sick':
+					if abs(device.x - staff.x) < 32 and abs(device.y - staff.y) < 32 and device.state == 'ailed':
+						t = staff.holding + '-' + device.ailment
+						if t in ('iv-sick', 'cucumber-sad', 'tape-angry', 'jacket-crazy'):
 							output.append({
 								'id': 'device_treat_' + str(device.id) + "_" + str(staff.id),
 								'label': "Treat",
 								'x': device.x,
 								'y': device.y - 50
 							})
+							
 		
 		return None if len(output) == 0 else output
 	

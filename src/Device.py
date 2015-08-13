@@ -9,6 +9,11 @@ START_Y = 30
 ID_ALLOC = [1]
 
 SICK_TREAT_TIME = 30 * 6
+SAD_TREAT_TIME = 30 * 7
+ANGRY_TREAT_TIME = 30 * 8
+CRAZY_TREAT_TIME = 30 * 9
+
+
 
 class Device:
 	def __init__(self, playboard, game_time, device_type, x, y, ailment):
@@ -115,7 +120,7 @@ class Device:
 			elif self.ailment == 'angry':
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_headphones.png'), sort_key, self.x, self.y)
 			elif self.ailment == 'crazy':
-				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_jacket.png'), sort_key, self.x, self.y)
+				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_straightjacket.png'), sort_key, self.x, self.y)
 			else:
 				raise Exception("No rendering code for ailment treatment.")
 			
