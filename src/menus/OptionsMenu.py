@@ -2,17 +2,28 @@ import pygame
 from src.MagicPotato import MAGIC_POTATO
 from src.constants import *
 from src.FontEngine import TEXT
+from src.Util import draw_alpha_rectangle
 
 class OptionsMenu:
 	def __init__(self, background_scene):
 		self.next = None
 		self.bg = background_scene
-		self.buttons = {
-			'full_screen': [0] * 4,
-			'sfx_volume': [0] * 4,
-			'music_volume': [0] * 4,
-			'back': [0] * 4
-		}
+		if self.bg != None:
+			self.buttons = {
+				'full_screen': [0] * 4,
+				'sfx_volume': [0] * 4,
+				'music_volume': [0] * 4,
+				'back': [0] * 4,
+				'main_menu': [0] * 4
+			}
+
+		else:
+			self.buttons = {
+				'full_screen': [0] * 4,
+				'sfx_volume': [0] * 4,
+				'music_volume': [0] * 4,
+				'back': [0] * 4
+			}
 		self.cursor = (0, 0)
 		self.currently_over = None
 		
@@ -35,6 +46,8 @@ class OptionsMenu:
 			pass
 		elif id == 'back':
 			# pass
+			self.next = self.bg
+		elif id == 'main_menu':
 			from src.menus.TitleScene import TitleScene # because top of file didn't work
 			self.next = TitleScene()
 	
@@ -42,7 +55,7 @@ class OptionsMenu:
 		if self.bg != None:
 			self.bg.render(screen, render_counter)
 		
-		pygame.draw.rect(screen, (40, 40, 40, 100), pygame.Rect(0, 0, GAME_WIDTH, GAME_HEIGHT))
+		draw_alpha_rectangle(screen, 0, 0, GAME_WIDTH, GAME_HEIGHT, 40, 40, 40, 70)
 		
 		mx, my = self.cursor
 		
