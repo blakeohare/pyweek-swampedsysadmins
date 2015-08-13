@@ -13,7 +13,7 @@ def main():
 	resizeable = pygame.RESIZABLE
 	
 	real_screen = pygame.display.set_mode(SCREEN_SIZE, resizeable)
-	pygame.display.set_caption("Some Sysadmins")
+	pygame.display.set_caption("Swamped Sysadmins")
 	virtual_screen = pygame.Surface((GAME_WIDTH, GAME_HEIGHT)).convert_alpha()
 	active_scene = TitleScene()
 	
