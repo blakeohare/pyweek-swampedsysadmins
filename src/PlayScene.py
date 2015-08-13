@@ -5,6 +5,9 @@ from src.PlayBoard import PlayBoard
 from src.Model import Model
 from src.FontEngine import TEXT
 from src.menus.WrapperMenu import WrapperMenu
+from src.menus.OptionsMenu import OptionsMenu
+
+MENU_LINK_SIZE = (16 * 5, 20)
 
 class PlayScene:
 	def __init__(self, level_id, model = None):
@@ -16,6 +19,7 @@ class PlayScene:
 		self.board = PlayBoard(self.model)
 		self.hover_buttons = None
 		self.active_button = None
+		self.mosue_xy = (99999, 999999)
 	
 	def update(self, events, mouse_coords):
 		
@@ -24,6 +28,8 @@ class PlayScene:
 		
 		if self.model.session.is_done():
 			self.next = WrapperMenu(self, self.model)
+		
+		self.mouse_xy = mouse_coords
 	
 	def render(self, screen, rc):
 		screen.fill((0, 0, 0))
@@ -68,30 +74,43 @@ class PlayScene:
 		self.render_hover_ui(screen, rc)
 	
 	def filter_hover_ui_events(self, events, mouse_xy):
-		if self.hover_buttons == None or len(self.hover_buttons) == 0: return events
+		hb = self.hover_buttons
+		if self.hover_buttons == None: hb = []
 		filtered_events = []
 		
 		x, y = mouse_xy
 		self.active_button = None
-		for button in self.hover_buttons:
+		for button in hb:
 			if x > button[0] and x < button[2] and y > button[1] and y < button[3]:
 				self.active_button = button[4]
+		
+		
 		
 		for event in events:
 			if event.mousedown:
 				x = event.x
 				y = event.y
 				handled = False
-				for button in self.hover_buttons:
-					if x >= button[0] and x <= button[2] and y >= button[1] and y <= button[3]:
-						self.perform_hover_ui_click(button[4])
-						handled = True
-						break
+				
+				if x < 16 * 5 and y < 20:
+					self.click_menu()
+					handled = True
+				else:
+					for button in hb:
+						if x >= button[0] and x <= button[2] and y >= button[1] and y <= button[3]:
+							self.perform_hover_ui_click(button[4])
+							handled = True
+							break
+							
 				if not handled:
 					filtered_events.append(event)
 			else:
 				filtered_events.append(event)
 		return events
+	
+	def click_menu(self):
+		
+		self.next = OptionsMenu(self)
 	
 	def perform_hover_ui_click(self, id):
 		if id.startswith('iv_take_'):
@@ -160,4 +179,9 @@ class PlayScene:
 			self.hover_buttons = hb
 		else:
 			self.hover_buttons = None
+		
+		color = 'white'
+		if self.mouse_xy[0] < MENU_LINK_SIZE[0] and self.mouse_xy[1] < MENU_LINK_SIZE[1]:
+			color = 'yellow'
+		TEXT.render(screen, 'Menu', color, 8, 4)
 		
