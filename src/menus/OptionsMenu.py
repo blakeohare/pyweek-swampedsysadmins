@@ -19,6 +19,11 @@ class OptionsMenu:
 
 		self.cursor = (0, 0)
 		self.currently_over = None
+
+		self.sfx_vol = MAGIC_POTATO.get_sound_volume()
+		self.music_vol = MAGIC_POTATO.get_music_volume()
+		self.new_sfx_vol = self.sfx_vol
+		self.new_music_vol = self.music_vol
 		
 	def update(self, events, mouse_coords):
 		self.cursor = mouse_coords
@@ -54,7 +59,7 @@ class OptionsMenu:
 		if self.bg == None:
 			screen.fill((0,0,0))
 		
-		draw_alpha_rectangle(screen, 0, 0, GAME_WIDTH, GAME_HEIGHT, 40, 40, 40, 70)
+		draw_alpha_rectangle(screen, 0, 0, GAME_WIDTH, GAME_HEIGHT, 40, 40, 40, 200)
 		
 		mx, my = self.cursor
 		
@@ -69,18 +74,18 @@ class OptionsMenu:
 		pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two, y + 67), (width_over_two + 200, y + 67), 2)
 		
 		for i in [18, 36, 55, 73, 91, 109, 127, 145, 164, 182]: # ours goes to 11!
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 33), (width_over_two + i, y + 42), 1)
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 63), (width_over_two + i, y + 72), 1)
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 31), (width_over_two + i, y + 44), 1)
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 61), (width_over_two + i, y + 74), 1)
 		
 		for i in [0, 200]: # end lines
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 30), (width_over_two + i, y + 45), 1)
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 60), (width_over_two + i, y + 75), 1)
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 29), (width_over_two + i, y + 46), 1)
+			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 59), (width_over_two + i, y + 76), 1)
 		
-		sfx_vol = MAGIC_POTATO.get_sound_volume()
-		music_vol = MAGIC_POTATO.get_music_volume()
+		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (self.sfx_vol * 2), y + 30), (width_over_two + (self.sfx_vol * 2), y + 45), 1)
+		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (self.music_vol * 2), y + 60), (width_over_two + (self.music_vol * 2), y + 75), 1)
 		
-		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (sfx_vol * 2), y + 30), (width_over_two + (sfx_vol * 2), y + 45), 3)
-		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (music_vol * 2), y + 60), (width_over_two + (music_vol * 2), y + 75), 3)
+		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.new_sfx_vol * 2) - 1, y + 32, 3, 12), 0)
+		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.new_music_vol * 2) - 1, y + 62, 3, 12), 0)
 		
 		current = None
 		
