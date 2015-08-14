@@ -7,7 +7,7 @@ class GraphMenu:
 		self.elements = None
 		self.parent = wrapper_menu
 		self.tab = 'Timesheet'
-		self.color = (40, 140, 40)
+		self.color = (40, 100, 60)
 	
 	def get_ui_elements(self):
 		if self.elements == None:

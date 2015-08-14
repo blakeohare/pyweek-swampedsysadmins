@@ -6,6 +6,7 @@ from src.menus.GraphMenu import GraphMenu
 from src.menus.HiringMenu import HiringMenu
 from src.menus.OrderMenu import OrderMenu
 from src.menus.ScoreMenu import ScoreMenu
+from src.menus.ToysMenu import ToysMenu
 from src.menus.UiElement import *
 
 MENU_LEFT = 50
@@ -25,11 +26,13 @@ class WrapperMenu:
 		self.graph_menu = GraphMenu(self, model)
 		self.hiring_menu = HiringMenu(self, model)
 		self.order_menu = OrderMenu(self, model)
+		self.toys_menu = ToysMenu(self, model)
 		self.ordered = [
 			self.score_menu,
 			self.order_menu,
+			self.toys_menu,
 			self.hiring_menu,
-			self.graph_menu
+			self.graph_menu,
 			]
 		self.mouse_xy = (0, 0)
 		self.tab_regions = [None] * len(self.ordered)
@@ -68,7 +71,7 @@ class WrapperMenu:
 	def render(self, screen, rc):
 		self.bg.render(screen, rc)
 		x, y = self.mouse_xy
-		px = MENU_LEFT + 30
+		px = MENU_LEFT + 8
 		py = MENU_TOP - 32
 		
 		alpha = 230
@@ -86,7 +89,7 @@ class WrapperMenu:
 			
 			self.tab_regions[i] = (left, top, right, bottom)
 			
-			px += width + 8
+			px += width + 6
 		
 		rgb = self.active_menu.color
 		
