@@ -52,7 +52,7 @@ class TitleScene:
 		mx, my = self.cursor
 		
 		y = GAME_HEIGHT // 2
-		x = GAME_WIDTH // 3
+		x = GAME_WIDTH // 5
 		
 		current = None
 		for option in [
@@ -69,7 +69,7 @@ class TitleScene:
 			if hover:
 				current = id
 			
-			coords = TEXT.render(screen, label, 'white' if hover else 'gray', x, y)
+			coords = TEXT.render(screen, label, 'yellow' if hover else 'white', x, y)
 			self.buttons[id] = (x, y, coords[0], coords[1])
 			y += 30
 		self.currently_over = current
