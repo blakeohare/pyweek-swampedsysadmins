@@ -32,7 +32,13 @@ class UiElement:
 				frame = (rc // 4) % self.frames
 				img = self.image[frame]
 			screen.blit(img, (self.x + offset_x, self.y + offset_y))
-			
+		
+		elif self.type == 'HOVER':
+			mx, my = mouse_xy
+			mx -= offset_x
+			my -= offset_y
+			if mx >= self.left  and mx < self.right and my >= self.top and my < self.bottom:
+				self.element.text = self.text
 		else:
 			raise Exception("Not implemented.")
 
@@ -84,4 +90,14 @@ def create_ui_image(img, x, y):
 	output.height = img.get_height()
 	output.right = x + output.width
 	output.bottom = y + output.height
+	return output
+
+def create_ui_hover_region(text_element, left, top, right, bottom, text):
+	output = UiElement('HOVER')
+	output.element = text_element
+	output.left = left
+	output.top = top
+	output.bottom = bottom
+	output.right = right
+	output.text = text
 	return output

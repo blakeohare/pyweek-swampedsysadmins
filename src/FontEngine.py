@@ -38,16 +38,23 @@ class FontEngine:
 	def render(self, screen, text, color, x, y):
 		if self.raw_letters_by_color == None: self.initialize()
 		font = self.raw_letters_by_color[color]
-		
+		orig_x = x
+		max_x = 0
 		for char in text:
 			if char == ' ':
 				x += self.space_size
+			elif char == '\n':
+				x = orig_x
+				y += HEIGHT
 			else:
 				char = font.get(char, None)
 				if char == None:
 					char = font['`']
 				screen.blit(char, (x, y))
 				x += char.get_width()
+			if x > max_x:
+				max_x = x
+			
 		return (x, y + HEIGHT)
 		
 		
