@@ -286,7 +286,7 @@ class PlayBoard:
 		d = abs(end_row - start_row) + abs(end_col - start_col)
 		if d == 1:
 			return True
-		if d == 2:
+		if d == 2 and end_row != start_row and end_col != start_col:
 			if start_x > end_x:
 				start_x, end_x = end_x, start_x
 				start_y, end_y = end_y, start_y
