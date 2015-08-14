@@ -101,7 +101,7 @@ class OptionsMenu:
 					pygame.draw.line(screen, button_color, (width_over_two + i, y + 1), (width_over_two + i, y + 14), 1)
 				for i in [0, 200]: # end lines
 					pygame.draw.line(screen, button_color, (width_over_two + i, y - 1), (width_over_two + i, y + 16), 1)
-				pygame.draw.rect(screen, button_color, pygame.Rect(width_over_two + (self.sfx_vol * 2) - 1, y + 2, 3, 12), 0)
+				pygame.draw.rect(screen, (255, 0, 0, 255) if hover else (180, 0, 0, 150), pygame.Rect(width_over_two + (self.sfx_vol * 2) - 1, y + 3, 3, 10), 0)
 				self.buttons[id] = (x, y, width_over_two + 220, coords[1])
 			elif id == 'music_volume':
 				pygame.draw.line(screen, button_color, (width_over_two, y + 7), (width_over_two + 200, y + 7), 2)
@@ -109,7 +109,7 @@ class OptionsMenu:
 					pygame.draw.line(screen, button_color, (width_over_two + i, y + 1), (width_over_two + i, y + 14), 1)
 				for i in [0, 200]: # end lines
 					pygame.draw.line(screen, button_color, (width_over_two + i, y - 1), (width_over_two + i, y + 16), 1)
-				pygame.draw.rect(screen, button_color, pygame.Rect(width_over_two + (self.music_vol * 2) - 1, y + 2, 3, 12), 0)
+				pygame.draw.rect(screen, (0, 255, 0, 255) if hover else (0, 180, 0, 150), pygame.Rect(width_over_two + (self.music_vol * 2) - 1, y + 3, 3, 10), 0)
 				self.buttons[id] = (x, y, width_over_two + 220, coords[1])
 			else:
 				self.buttons[id] = (x, y, coords[0], coords[1])
