@@ -133,6 +133,19 @@ class Session:
 					'vx': 0,
 					'vy': -3
 				})
+			elif device.state == 'dead' and device.replaced:
+				playboard.animations.append({
+					'type': 'device',
+					'ttl': 10,
+					'mx': device.x,
+					'my': device.y,
+					'x': device.x,
+					'y': device.y,
+					'device': device.device_type,
+					'overlay': 'dead',
+					'vx': 0,
+					'vy': -3
+				})
 				
 			else:
 				new_active_devices.append(device)

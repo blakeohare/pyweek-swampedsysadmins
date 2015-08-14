@@ -15,6 +15,8 @@ ANGRY_TREAT_TIME = 30 * 8
 CRAZY_TREAT_TIME = 30 * 9
 UNKNOWN_TREAT_TIME = 30 * 6
 
+STARTING_TTL = 30 * 40
+
 AILMENTS = 'sick sad angry crazy'.split(' ')
 
 class Device:
@@ -30,6 +32,7 @@ class Device:
 		self.landing_x, self.landing_y = playboard.get_random_open_tile()
 		self.landing_x = self.landing_x * 32 + 16
 		self.landing_y = self.landing_y * 32 + 16
+		self.ttl = STARTING_TTL
 		
 		self.ailment = ailment # { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
 		self.actual_ailment = random.choice(AILMENTS)
@@ -38,6 +41,8 @@ class Device:
 		self.resolution = None
 		self.state_counter = 0
 		self.playboard = playboard
+		self.model = playboard.model
+		self.replaced = False
 	
 	def start_treatment(self):
 		self.state = 'treated'
@@ -45,7 +50,9 @@ class Device:
 	
 	def update(self):
 		self.state_counter += 1
+		self.ttl -= 1
 		if self.state == 'flying':
+			self.ttl = STARTING_TTL # still immune to the aging process while flying through the air
 			progress = 1.0 * self.state_counter / FLYING_FRAMES
 			antiprogress = 1 - progress
 			self.x = int(START_X * antiprogress + self.landing_x * progress)
@@ -57,8 +64,31 @@ class Device:
 				self.state_counter = 0
 				if self.ailment == 'dead':
 					self.state = 'dead'
-					self.resolve_dead_device()
 		elif self.state == 'dead':
+			if not self.replaced:
+				self.replaced = True
+				t = self.device_type
+				self.resolution = 'ordered'
+				if t == 'phone':
+					if self.model.inventory_phones > 0:
+						self.resolution = 'replaced'
+						self.model.inventory_phones -= 1
+					else:
+						self.model.special_order_phone()
+				elif t == 'tablet':
+					if self.model.inventory_tablets > 0:
+						self.resolution = 'replaced'
+						self.model.inventory_tablets -= 1
+					else:
+						self.model.special_order_tablet()
+				elif t == 'laptop':
+					if self.model.inventory_laptops > 0:
+						self.resolution = 'replaced'
+						self.model.inventory_laptops -= 1
+					else:
+						self.model.special_order_laptop()
+					
+				
 			self.resolution = 'replaced' # TODO: this needs to be dependent on whether you have enough reserves
 		elif self.state == 'ailed':
 			if self.ailment == 'unknown':
@@ -88,28 +118,11 @@ class Device:
 				self.state = 'new'
 				self.resolution = 'treated'
 				self.state_counter = 0
-	
-	def resolve_dead_device(self):
-		model = self.playboard.model
-		if self.type == 'laptop':
-			if model.inventory_laptops > 0:
-				self.resolution = 'replaced'
-				model.inventory_laptops -= 1
-			else:
-				self.resolution = 'ordered'
-		elif self.type == 'phone':
-			if model.inventory_phones > 0:
-				self.resolution = 'replaced'
-				model.inventory_phones -= 1
-			else:
-				self.resolution = 'ordered'
-		elif self.type == 'tablet':
-			if model.inventory_tablets > 0:
-				self.resolution = 'replaced'
-				model.inventory_tablets -= 1
-			else:
-				self.resolution = 'ordered'
 		
+		if self.ttl < 0 and self.state != 'dead':
+			self.state = 'dead'
+			self.state_counter = 0
+	
 	
 	def render(self, rc, render_list):
 		sort_key = self.y * 1000000
@@ -170,6 +183,29 @@ class Device:
 			height = 8
 			x = self.x - 12
 			y = self.y + 8
+			self.draw_rectangle(render_list, sort_key, x, y, width, height, (100, 100, 100))
+			self.draw_rectangle(render_list, sort_key, x, y, int(width * progress), height, color)
+		
+		if self.state == 'ailed' or self.state == 'treated':
+			progress = 1.0 * self.ttl / STARTING_TTL
+			color = (0, 180, 0)
+			if progress > .5:
+				if progress > .75:
+					color = (0, 100, 200)
+				else:
+					color = (0, 180, 0)
+			elif progress > .25:
+				color = (255, 255, 0)
+			elif progress > .1:
+				color = (255, 128, 0)
+			else:
+				color = (255, 0, 40)
+			
+			
+			width = 50
+			height = 8
+			x = self.x - 12
+			y = self.y
 			self.draw_rectangle(render_list, sort_key, x, y, width, height, (100, 100, 100))
 			self.draw_rectangle(render_list, sort_key, x, y, int(width * progress), height, color)
 		
