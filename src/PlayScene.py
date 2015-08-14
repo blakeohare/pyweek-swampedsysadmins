@@ -132,10 +132,10 @@ class PlayScene:
 				self.model.inventory_tapes -= 1
 				return
 		elif id.startswith('jacket_take_'):
-			if self.model.inventory_tapes > 0:
+			if self.model.inventory_jackets > 0:
 				staff_member = self.get_staff_member(id[len('jacket_take_'):])
 				staff_member.holding = 'jacket'
-				self.model.inventory_tapes -= 1
+				self.model.inventory_jackets -= 1
 				return
 		elif id.startswith('device_treat_'):
 			parts = id.split('_')
