@@ -82,7 +82,7 @@ def main():
 			active_scene.next = None
 			active_scene = next_scene
 		
-		if active_scene == None:
+		if active_scene == 'exit':
 			return
 		
 		counter += 1

@@ -43,7 +43,7 @@ class TitleScene:
 			self.next = OptionsMenu(None)
 		
 		elif id == 'exit':
-			self.next = None
+			self.next = 'exit'
 	
 	def render(self, screen, rc):
 		bg = IMAGES.get('menus/title.png')
