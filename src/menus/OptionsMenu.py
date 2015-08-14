@@ -72,24 +72,7 @@ class OptionsMenu:
 		
 		y = GAME_HEIGHT // 3
 		x = GAME_WIDTH // 5
-		
 		width_over_two = GAME_WIDTH // 2
-		
-		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two, y, 15, 15), 0 if MAGIC_POTATO.is_full_screen() else 1)
-		
-		pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two, y + 37), (width_over_two + 200, y + 37), 2)
-		pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two, y + 67), (width_over_two + 200, y + 67), 2)
-		
-		for i in [18, 36, 55, 73, 91, 109, 127, 145, 164, 182]: # ours goes to 11!
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 31), (width_over_two + i, y + 44), 1)
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 61), (width_over_two + i, y + 74), 1)
-		
-		for i in [0, 200]: # end lines
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 29), (width_over_two + i, y + 46), 1)
-			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 59), (width_over_two + i, y + 76), 1)
-		
-		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.sfx_vol * 2) - 1, y + 32, 3, 12), 0)
-		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.music_vol * 2) - 1, y + 62, 3, 12), 0)
 		
 		current = None
 		
@@ -104,13 +87,29 @@ class OptionsMenu:
 			
 			if hover:
 				current = id
+				button_color = (255, 255, 255, 255)
+			else:
+				button_color = (150, 150, 150, 150)
 			
 			coords = TEXT.render(screen, label, 'white' if hover else 'gray', x, y)
 			if id == 'full_screen':
 				self.buttons[id] = (x, y, width_over_two + 20, coords[1])
+				pygame.draw.rect(screen, button_color, pygame.Rect(width_over_two, y, 15, 15), 0 if MAGIC_POTATO.is_full_screen() else 1)
 			elif id == 'sfx_volume':
+				pygame.draw.line(screen, button_color, (width_over_two, y + 7), (width_over_two + 200, y + 7), 2)
+				for i in [18, 36, 55, 73, 91, 109, 127, 145, 164, 182]: # ours go to 11!
+					pygame.draw.line(screen, button_color, (width_over_two + i, y + 1), (width_over_two + i, y + 14), 1)
+				for i in [0, 200]: # end lines
+					pygame.draw.line(screen, button_color, (width_over_two + i, y - 1), (width_over_two + i, y + 16), 1)
+				pygame.draw.rect(screen, button_color, pygame.Rect(width_over_two + (self.sfx_vol * 2) - 1, y + 2, 3, 12), 0)
 				self.buttons[id] = (x, y, width_over_two + 220, coords[1])
 			elif id == 'music_volume':
+				pygame.draw.line(screen, button_color, (width_over_two, y + 7), (width_over_two + 200, y + 7), 2)
+				for i in [18, 36, 55, 73, 91, 109, 127, 145, 164, 182]: # ours go to 11!
+					pygame.draw.line(screen, button_color, (width_over_two + i, y + 1), (width_over_two + i, y + 14), 1)
+				for i in [0, 200]: # end lines
+					pygame.draw.line(screen, button_color, (width_over_two + i, y - 1), (width_over_two + i, y + 16), 1)
+				pygame.draw.rect(screen, button_color, pygame.Rect(width_over_two + (self.music_vol * 2) - 1, y + 2, 3, 12), 0)
 				self.buttons[id] = (x, y, width_over_two + 220, coords[1])
 			else:
 				self.buttons[id] = (x, y, coords[0], coords[1])
