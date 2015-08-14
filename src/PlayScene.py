@@ -39,7 +39,7 @@ class PlayScene:
 		x = 8
 		y = 32 * 10 - 8
 		things = [
-			("Budget", 1000, 'white'),
+			("Budget", self.model.budget, 'white'),
 			("IV's", self.model.inventory_ivs, 'blue'),
 			("Cucumbers", self.model.inventory_cucumbers, 'green'),
 			('Tapes', self.model.inventory_tapes, 'gray'),
