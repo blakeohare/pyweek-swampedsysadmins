@@ -25,6 +25,14 @@ class UiElement:
 			
 			color = 'white' if is_enabled else 'gray'
 			TEXT.render(screen, self.text, color, offset_x + self.text_x, offset_y + self.text_y)
+		elif self.type == 'IMAGE':
+			if self.frames == 1:
+				img = self.image[0]
+			else:
+				frame = (rc // 4) % self.frames
+				img = self.image[frame]
+			screen.blit(img, (self.x + offset_x, self.y + offset_y))
+			
 		else:
 			raise Exception("Not implemented.")
 
@@ -58,3 +66,22 @@ def create_ui_text(text, color, x, y):
 	output.height = 16
 	return output
 
+def create_ui_image_list(images, x, y):
+	output = create_ui_image(images[0], x, y)
+	output.image = images[:]
+	output.frames = len(images)
+	return output
+
+def create_ui_image(img, x, y):
+	output = UiElement('IMAGE')
+	output.image = [img]
+	output.frames = 1
+	output.x = x
+	output.y = y
+	output.left = x
+	output.top = y
+	output.width = img.get_width()
+	output.height = img.get_height()
+	output.right = x + output.width
+	output.bottom = y + output.height
+	return output
