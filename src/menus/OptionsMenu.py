@@ -22,8 +22,6 @@ class OptionsMenu:
 
 		self.sfx_vol = MAGIC_POTATO.get_sound_volume()
 		self.music_vol = MAGIC_POTATO.get_music_volume()
-		self.new_sfx_vol = self.sfx_vol
-		self.new_music_vol = self.music_vol
 		
 	def update(self, events, mouse_coords):
 		self.cursor = mouse_coords
@@ -34,14 +32,23 @@ class OptionsMenu:
 					self.do_command(self.currently_over)
 	
 	def do_command(self, id):
+		width_over_two = GAME_WIDTH // 2
+		button = self.buttons[id]
+		mx, my = self.cursor
 		if id == 'full_screen':
 			if MAGIC_POTATO.is_full_screen():
 				MAGIC_POTATO.set_full_screen(False)
 			else: MAGIC_POTATO.set_full_screen(True)
 		elif id == 'sfx_volume':
-			pass
+			if mx < (width_over_two - 20): pass
+			else:
+				MAGIC_POTATO.set_sound_volume((mx - width_over_two) // 2)
+				self.sfx_vol = MAGIC_POTATO.get_sound_volume()
 		elif id == 'music_volume':
-			pass
+			if mx < (width_over_two - 20): pass
+			else:
+				MAGIC_POTATO.set_music_volume((mx - width_over_two) // 2)
+				self.music_vol = MAGIC_POTATO.get_music_volume()
 		elif id == 'back':
 			if len(self.buttons) == 5:
 				self.next = self.bg
@@ -81,11 +88,8 @@ class OptionsMenu:
 			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 29), (width_over_two + i, y + 46), 1)
 			pygame.draw.line(screen, (150, 150, 150, 150), (width_over_two + i, y + 59), (width_over_two + i, y + 76), 1)
 		
-		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (self.sfx_vol * 2), y + 30), (width_over_two + (self.sfx_vol * 2), y + 45), 1)
-		pygame.draw.line(screen, (200, 200, 200, 200), (width_over_two + (self.music_vol * 2), y + 60), (width_over_two + (self.music_vol * 2), y + 75), 1)
-		
-		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.new_sfx_vol * 2) - 1, y + 32, 3, 12), 0)
-		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.new_music_vol * 2) - 1, y + 62, 3, 12), 0)
+		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.sfx_vol * 2) - 1, y + 32, 3, 12), 0)
+		pygame.draw.rect(screen, (150, 150, 150, 150), pygame.Rect(width_over_two + (self.music_vol * 2) - 1, y + 62, 3, 12), 0)
 		
 		current = None
 		
@@ -101,9 +105,14 @@ class OptionsMenu:
 			if hover:
 				current = id
 			
-			# if id == 'sfx_volume':
-			
 			coords = TEXT.render(screen, label, 'white' if hover else 'gray', x, y)
-			self.buttons[id] = (x, y, coords[0], coords[1])
+			if id == 'full_screen':
+				self.buttons[id] = (x, y, width_over_two + 20, coords[1])
+			elif id == 'sfx_volume':
+				self.buttons[id] = (x, y, width_over_two + 220, coords[1])
+			elif id == 'music_volume':
+				self.buttons[id] = (x, y, width_over_two + 220, coords[1])
+			else:
+				self.buttons[id] = (x, y, coords[0], coords[1])
 			y += 30
 		self.currently_over = current
