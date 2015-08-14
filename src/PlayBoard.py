@@ -4,6 +4,7 @@ import random
 from src.Util import *
 from src.DragDescriptor import DragDescriptor
 from src.ImageLibrary import IMAGES
+from src.RoomRenderer import ROOM_RENDERER
 
 class Tile:
 	def __init__(self, id, flags):
@@ -33,12 +34,12 @@ c	d
 RAW_OFFICE = """
 xxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxx
-xi.c.t.x...........x
-x......x...........x
+xi..c..............x
 x..................x
 x..................x
-x......x...........x
-x....j.x...........x
+x..................x
+x..................x
+x.t..j.............x
 xxxxxxxx...........x
 @      x...........x
 @      x...........x
@@ -64,7 +65,7 @@ office_width = len(office_rows[0])
 
 INTERESTING_COORDS = {}
 
-
+# session is nullable
 def build_office_map(session, interesting_coords_out):
 
 	interesting_coords = {}
@@ -86,25 +87,25 @@ def build_office_map(session, interesting_coords_out):
 	blocking = TILE_MANIFEST['x']
 	for interesting in interesting_coords.keys():
 		if interesting == 'i':
-			if session.is_iv_available():
+			if session == None or session.is_iv_available():
 				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
 				interesting_coords_out['i'] = (x, y)
 		elif interesting == 'c':
-			if session.is_cucumber_available():
+			if session == None or session.is_cucumber_available():
 				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
 				interesting_coords_out['c'] = (x, y)
 		elif interesting == 't':
-			if session.is_tape_available():
+			if session == None or session.is_tape_available():
 				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
 				interesting_coords_out['t'] = (x, y)
 		elif interesting == 'j':
-			if session.is_jacket_available():
+			if session == None or session.is_jacket_available():
 				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
@@ -338,96 +339,17 @@ class PlayBoard:
 				return member
 		return None
 	
+	
 	def render(self, screen, rc, left_offset, top_offset, staff):
-		# will have to merge staff and doodads
 		
-		#self.render_collision_hints(screen, left_offset, top_offset)
+		supplies = {
+			'i': self.model.inventory_ivs > 0,
+			'c': self.model.inventory_cucumbers > 0,
+			't': self.model.inventory_tapes > 0,
+			'j': self.model.inventory_jackets > 0
+		}
 		
-		bg = IMAGES.get('the_room.png')
-		screen.blit(bg, (0, 0))
+		ROOM_RENDERER.render(screen, rc, self.model.session.active_devices, staff, self.interesting_coords, supplies, self.animations)
 		
-		render_list = []
-		for member in staff:
-			member.render(rc, render_list)
-			if member.drag_path != None:
-				for dot in member.drag_path.get_marker_list(rc):
-					x, y = dot
-					render_list.append(('R', y * 1000000, x - 1, y - 1, 2, 2, (255, 255, 0)))
-			
-		for device in self.model.session.active_devices:
-			device.render(rc, render_list)
-			
-		for key in self.interesting_coords.keys():
-			x, y = self.interesting_coords[key]
-			
-			if key == 'i':
-				file = 'ivs'
-				has_any = self.model.inventory_ivs > 0
-			elif key == 'c':
-				file = 'cucumber_station'
-				has_any = self.model.inventory_cucumbers > 0
-				x += .3
-			elif key == 't':
-				file = 'tape_shelf'
-				has_any = self.model.inventory_tapes > 0
-			elif key == 'j':
-				file = 'jacket_rack'
-				has_any = self.model.inventory_jackets > 0
-			
-			path = 'treatments/' + file + '_' + ('full' if has_any else 'empty') + '.png'
-			img = IMAGES.get(path)
-			render_list.append(('I', (y + 1) * 32 * 1000000, img, int(x * 32), (y + 1) * 32 - img.get_height()))
-			
-		new_animations = []
-		for animation in self.animations:
-			images = []
-			if animation['type'] == 'device':
-				images.append(IMAGES.get('devices/' + animation['device'] + '.png'))
-				images.append(IMAGES.get('devices/' + animation['overlay'] + '.png'))
-			ttl = animation['ttl']
-			ttl -= 1
-			animation['ttl'] = ttl
-			
-			for img in images:
-				render_list.append(('I', animation['mx'] + animation['my'] * 1000000, img, animation['x'] - img.get_width() // 2, animation['y'] - img.get_height()))
-				
-			animation['x'] += animation['vx']
-			animation['y'] += animation['vy']
-			
-			if ttl > 0:
-				new_animations.append(animation)
-		self.animations = new_animations
-		render_list.sort(key = lambda x:x[1])
-		
-		
-		for entity in render_list:
-			type = entity[0]
-			if type == 'I':
-				img = entity[2]
-				x = entity[3]
-				y = entity[4]
-				screen.blit(img, (x + left_offset, y + top_offset))
-			elif type == 'R':
-				x = entity[2]
-				y = entity[3]
-				w = entity[4]
-				h = entity[5]
-				color = entity[6]
-				pygame.draw.rect(screen, color, pygame.Rect(x, y, w, h))
 		
 	
-	def render_collision_hints(self, screen, left, top):
-		width = len(self.office)
-		height = len(self.office[0])
-		
-		y = 0
-		while y < height:
-			x = 0
-			while x < width:
-				tile = self.office[x][y]
-				if tile != None:
-					color = (20, 20, 20) if tile.passable else (100, 100, 100)
-					pygame.draw.rect(screen, color, pygame.Rect(left + x * 32, top + y * 32, 32, 32))
-				x += 1
-			y += 1
-		
