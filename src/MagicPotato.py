@@ -16,7 +16,7 @@ class MagicPotato:
 	def get_music_volume(self):
 		return int(self._music_volume * 100)
 	
-	def set_sound_volume(self, percent):
+	def set_music_volume(self, percent):
 		if percent < 0: percent = 0
 		if percent > 100: percent = 100
 		ratio = percent / 100.0
