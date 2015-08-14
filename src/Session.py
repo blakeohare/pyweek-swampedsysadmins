@@ -39,15 +39,18 @@ class Session:
 		elif self.level >= 7:
 			ailments *= 3 # reduce the probability that it will be dead on arrival
 			ailments.append('dead') 
-			
+		
 		self.total_devices = 0
 		if self.level > 0:
 			total = 5 + 5 * self.level
 			
-			if self.device_count_override != None:
-				total = self.device_count_override
+			#if self.device_count_override != None:
+			#	total = self.device_count_override
 			
 			
+			if IS_DEBUG:
+				total = 1
+				
 			self.total_devices = total
 			types = ['laptop']
 			if self.level > 2: types.append('tablet')
