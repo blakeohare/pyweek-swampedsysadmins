@@ -54,6 +54,11 @@ class OrderMenu:
 			elements.append(create_ui_text("Replacement Equipment", 'gray', col1, y))
 			y += 30
 			
+			elements.append(create_ui_text('Laptops', 'white', col1, y))
+			elements.append(create_ui_text(self.model.inventory_laptops, 'white', col2, y))
+			elements.append(create_ui_button('$'+ str(LAPTOP_PRICE), self.buy_laptop, col3, y, 100, 24, self.can_afford))
+			y += 30
+			
 			elements.append(create_ui_text('Phones', 'white', col1, y))
 			elements.append(create_ui_text(self.model.inventory_phones, 'white', col2, y))
 			elements.append(create_ui_button('$' + str(PHONE_PRICE), self.buy_phone, col3, y, 100, 24, self.can_afford))
@@ -62,11 +67,6 @@ class OrderMenu:
 			elements.append(create_ui_text('Tablets', 'white', col1, y))
 			elements.append(create_ui_text(self.model.inventory_tablets, 'white', col2, y))
 			elements.append(create_ui_button('$' + str(TABLET_PRICE), self.buy_tablet, col3, y, 100, 24, self.can_afford))
-			y += 30
-			
-			elements.append(create_ui_text('Laptops', 'white', col1, y))
-			elements.append(create_ui_text(self.model.inventory_laptops, 'white', col2, y))
-			elements.append(create_ui_button('$'+ str(LAPTOP_PRICE), self.buy_laptop, col3, y, 100, 24, self.can_afford))
 			y += 30
 			
 			self.elements = elements
