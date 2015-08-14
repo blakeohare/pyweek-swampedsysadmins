@@ -1,6 +1,6 @@
 import pygame
 
-LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\':0123456789$'
+LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\':0123456789$%+'
 
 BACKGROUND = (255, 0, 255)
 
@@ -26,6 +26,8 @@ filename_overrides = {
 	"'": 'apostrophe',
 	':': 'colon',
 	'$': 'pound',
+	'%': 'percent',
+	'+': 'plus',
 }
 for i in range(10):
 	filename_overrides[str(i)] = 'num' + str(i)
