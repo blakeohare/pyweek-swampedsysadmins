@@ -353,7 +353,7 @@ class PlayBoard:
 							dx = x - foosball[0] + 1
 							dy = y - foosball[1]
 							dist = (dx ** 2 + dy ** 2) ** .5
-							if dist < 4:
+							if dist <= 4:
 								allow = False
 						if allow:
 							potential.append((x, y))

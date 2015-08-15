@@ -3,7 +3,7 @@ import random
 from src.Device import Device		
 
 class Session:
-	def __init__(self, level_id):
+	def __init__(self, level_id, model = None):
 		self.counter = 0
 		self.laptops_fixed = 0
 		self.phones_fixed = 0
@@ -19,6 +19,16 @@ class Session:
 		#self.device_count_override = 3
 		
 		self.employee_anger = None
+		#self.level = 10
+		totoro_count = 0
+		if model != None:
+			for furn in model.furniture:
+				if furn[0] == '2':
+					totoro_count += 1
+		
+		totoro_factor = .91 ** totoro_count
+		#print 'ttr', totoro_factor
+		#level_id = 100
 		
 		self.devices = []
 		self.active_devices = []
@@ -27,26 +37,29 @@ class Session:
 		ailments = ['sick']
 		if self.level >= 2:
 			ailments.append('sad')
-		elif self.level >= 3:
+		if self.level >= 3:
 			ailments.append('angry')
-		elif self.level >= 4:
+		if self.level >= 4:
 			ailments.append('crazy')
-		elif self.level >= 5:
+		if self.level >= 5:
 			ailments.append('unknown')
-		elif self.level >= 7:
+		if self.level >= 7:
 			ailments *= 3 # reduce the probability that it will be dead on arrival
 			ailments.append('dead') 
 		
+		#print ailments
 		self.total_devices = 0
 		if self.level > 0:
 			total = 5 + 2 * self.level
 			
-			if self.device_count_override != None:
-				total = self.device_count_override
+			#total = 100
+			
+			#if self.device_count_override != None:
+			#	total = self.device_count_override
 			
 			
-			if IS_DEBUG:
-				total = 1
+			#if IS_DEBUG:
+			#	total = 1
 				
 			self.total_devices = total
 			types = ['laptop']
@@ -62,7 +75,11 @@ class Session:
 				t = t * .95 + .025
 				t = int(self.end * t)
 				random.shuffle(ailments)
-				self.events.append(('device', t, types[i], ailments[0]))
+				ail = ailments[0]
+				if random.random() > totoro_factor:
+					ail = 'sick'
+					#print 'totoro replaced'
+				self.events.append(('device', t, types[i], ail))
 		
 		for event in self.required_events:
 			devices = 'phone tablet laptop'.split(' ')

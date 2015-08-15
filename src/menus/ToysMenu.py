@@ -24,6 +24,12 @@ class ToysMenu:
 		self.tab = 'Toys'
 		self.color = (100, 100, 40)
 	
+	def can_buy_foosball(self):
+		for furn in self.model.furniture:
+			if furn[0] == '5':
+				return False
+		return True
+	
 	def get_ui_elements(self):
 		if self.elements == None:
 			elements = []
@@ -35,6 +41,7 @@ class ToysMenu:
 			row1 = 10
 			row2 = 150
 			row3 = row2 * 2 - row1
+			
 			
 			lava_lamp_image = create_ui_image_list([
 				IMAGES.get('furniture/lava_lamp0.png'),
@@ -58,7 +65,7 @@ class ToysMenu:
 			
 			foosball_image = create_ui_image(IMAGES.get('furniture/foosball.png'), col2, row2)
 			elements.append(foosball_image)
-			elements.append(create_ui_button('$' + str(FOOSBALL_PRICE), self.buy_foosball, col2, row2 + 70, 100, 24, lambda:self.can_afford(FOOSBALL_PRICE)))
+			elements.append(create_ui_button('$' + str(FOOSBALL_PRICE), self.buy_foosball, col2, row2 + 70, 100, 24, lambda:(self.can_buy_foosball() and self.can_afford(FOOSBALL_PRICE))))
 			
 			description = create_ui_text('Mouse over item for description.', 'white', col1, row3 - 32)
 			elements.append(description)
