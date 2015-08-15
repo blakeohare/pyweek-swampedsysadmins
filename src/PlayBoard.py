@@ -152,14 +152,26 @@ class PlayBoard:
 		
 		for event in events:
 			if event.mousedown:
-				member = self.find_staff_member(event.x, event.y)
-				if member != None:
-					self.drag_offset = (member.x - event.x, member.y - event.y)
-					drag = DragDescriptor(member)
-					drag.is_active = True
-					self.drag_descriptor.append(drag)
-					member.drag_path = drag
-					self.active_drag = drag
+				members = self.find_staff_members(event.x, event.y) # find staff in range
+				if len(members) > 0:
+					sorted_members = []
+					for member in members:
+						dx = member.x - event.x
+						dy = member.y - event.y
+						dist = (dx ** 2 + dy ** 2) ** .5
+						if self.is_line_segment_okay(event.x, event.y, member.x, member.y):
+							sorted_members.append((dist, member))
+					sorted_members.sort(key=lambda x:x[0])
+					
+					if len(sorted_members) > 0:
+						member = sorted_members[0][1]
+						self.drag_offset = (0, 0) #(member.x - event.x, member.y - event.y)
+						drag = DragDescriptor(member)
+						drag.is_active = True
+						self.drag_descriptor.append(drag)
+						member.drag_path = drag
+						self.active_drag = drag
+						self.active_drag.add_point(event.x, event.y, self)
 			elif event.mouseup:
 				if self.active_drag != None:
 					self.active_drag.is_active = False
@@ -348,15 +360,25 @@ class PlayBoard:
 		tile = self.office[col][row]
 		if tile == None: return False
 		return tile.passable
-	def find_staff_member(self, x, y):
+	
+	def find_staff_members(self, x, y):
+		output = []
 		for member in self.model.staff:
 			left = member.x - 16
 			right = member.x + 16
 			top = member.y - 64
 			bottom = member.y
+			
+			padding = 16
+			
+			left -= padding
+			right += padding
+			top -= padding
+			bottom += padding
+			
 			if x >= left and x <= right and y >= top and y <= bottom:
-				return member
-		return None
+				output.append(member)
+		return output
 	
 	
 	def render(self, screen, rc, left_offset, top_offset, staff):
