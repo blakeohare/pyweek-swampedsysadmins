@@ -368,7 +368,7 @@ class PlayBoard:
 			'j': self.model.inventory_jackets > 0
 		}
 		
-		ROOM_RENDERER.render(screen, rc, self.model.session.active_devices, staff, self.interesting_coords, supplies, self.animations)
+		ROOM_RENDERER.render(screen, rc, self.model.session.active_devices, staff, self.interesting_coords, supplies, self.animations, False)
 		
 		
 	

@@ -105,7 +105,7 @@ class PlaceFurnitureMenu:
 		if self.current_valid_coord != None:
 			interesting_coords = interesting_coords + [[self.item_type] + list(self.current_valid_coord)]
 		
-		ROOM_RENDERER.render(screen, rc, None, None, interesting_coords, None, None)
+		ROOM_RENDERER.render(screen, rc, None, None, interesting_coords, None, None, True)
 		
 		text = 'Cancel'
 		yoffset = 0
