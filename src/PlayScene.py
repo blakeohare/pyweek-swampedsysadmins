@@ -6,6 +6,7 @@ from src.Model import Model
 from src.FontEngine import TEXT
 from src.menus.WrapperMenu import WrapperMenu
 from src.menus.OptionsMenu import OptionsMenu
+from src.Reward import Reward
 
 MENU_LINK_SIZE = (16 * 5, 20)
 
@@ -28,6 +29,9 @@ class PlayScene:
 		self.board.update(events)
 		
 		if self.model.session.is_done():
+			reward = Reward(self.model, self.model.session)
+			self.model.budget += reward.calculate_next_budget()
+			self.model.reward = reward
 			self.next = WrapperMenu(self, self.model)
 		
 		self.mouse_xy = mouse_coords

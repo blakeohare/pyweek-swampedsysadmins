@@ -11,11 +11,11 @@ class Session:
 		
 		IS_DEBUG = False
 		
-		self.end = 30 * 60 * 2 # 2 minutes
+		self.end = 30 * 60 * 1 # 1 minute
 		self.device_count_override = None
 		self.required_events = []
 		
-		self.end = 10 * 30
+		#self.end = 10 * 30 # 10 seconds
 		
 		####### HACK TO SPEED THINGS UP ########
 		if IS_DEBUG:

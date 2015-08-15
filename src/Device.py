@@ -25,6 +25,7 @@ class Device:
 		ID_ALLOC[0] += 1
 		self.start = game_time
 		self.end = None
+		self.response_time = 0
 		self.type = 'device'
 		self.device_type = device_type # { 'phone', 'tablet', 'laptop' }
 		self.x = START_X
@@ -89,6 +90,7 @@ class Device:
 						self.model.special_order_laptop()
 					
 		elif self.state == 'ailed':
+			self.response_time += 1
 			if self.ailment == 'unknown':
 				for staff in self.playboard.model.staff:
 					dx = staff.x - self.x
@@ -99,6 +101,7 @@ class Device:
 				if self.unknown_discovery_counter >= UNKNOWN_TREAT_TIME:
 					self.ailment = self.actual_ailment
 		elif self.state == 'treated':
+			self.response_time += 1
 			if self.ailment == 'sick':
 				treat_time = SICK_TREAT_TIME
 			elif self.ailment == 'sad':

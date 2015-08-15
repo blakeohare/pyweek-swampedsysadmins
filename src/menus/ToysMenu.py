@@ -68,7 +68,7 @@ class ToysMenu:
 				(plush_image, "Giant plush:\n-10% chance of sad/angry/crazy\ndevices."),
 				(plant_image, "Famous flower:\n+10% productivity, small radius."),
 				(bean_bag_image, "Bean Bag:\n+3% productivity everywhere."),
-				(foosball_image, "Miniature Sportsball:\n-5% productivity, devices don't\nland near it."),
+				(foosball_image, "Miniature Sportsball:\n-5% productivity, devices don't\nland near it. Limit 1"),
 			]
 			
 			for t in descriptions:

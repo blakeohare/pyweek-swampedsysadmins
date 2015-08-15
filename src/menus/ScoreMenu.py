@@ -27,6 +27,9 @@ class ScoreMenu:
 			row2 = 90
 			row3 = 130
 			
+			row4 = 190
+			row5 = 230
+			
 			elements.append(create_ui_text('Fixed', 'white', col0, row1))
 			elements.append(create_ui_text('Replaced', 'white', col0, row2))
 			elements.append(create_ui_text('Special Order', 'white', col0, row3))
@@ -53,6 +56,14 @@ class ScoreMenu:
 			elements.append(self.create_grid_element(counts.get('laptops_ordered', 0), col1, row3, 'red'))
 			elements.append(self.create_grid_element(counts.get('phones_ordered', 0), col2, row3, 'red'))
 			elements.append(self.create_grid_element(counts.get('tablets_ordered', 0), col3, row3, 'red'))
+			
+			elements.append(create_ui_text('Next Budget Allowance:', 'white', col0, row4))
+			b = self.model.reward.calculate_next_budget()
+			elements.append(create_ui_text('$' + str(b), 'green' if b > 0 else 'red', col2, row4))
+			
+			elements.append(create_ui_text('Average Turnaround:', 'white', col0, row5))
+			t = self.model.reward.get_avg_turnaround()
+			elements.append(create_ui_text('{0:.2g}'.format(t) + ' second' + ('' if t == 1 else 's'), 'gray', col2, row5))
 			
 			self.elements = elements
 		return self.elements
