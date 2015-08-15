@@ -4,6 +4,7 @@ from src.ImageLibrary import IMAGES
 from src.FontEngine import TEXT
 from src.PlayScene import PlayScene
 from src.menus.OptionsMenu import OptionsMenu
+from src.Sound import SND
 
 class TitleScene:
 	def __init__(self):
@@ -16,9 +17,14 @@ class TitleScene:
 		}
 		self.cursor = (0, 0)
 		self.currently_over = None
+		self.first = True
 	
 	def update(self, events, mouse_pos):
 		self.cursor = mouse_pos
+		
+		if self.first:
+			self.first = False
+			SND.music_title()
 		
 		for event in events:
 			if event.mousedown:

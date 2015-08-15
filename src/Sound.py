@@ -2,6 +2,8 @@ MUSIC_GAMEPLAY = 'RingOfSpinningElephants, TheTransistorProletariat'
 
 MUSIC_MENU = '1LOfMilk'
 
+MUSIC_TITLE = 'BabyBlueWallpaper'
+
 CUCUMBER_TAKE = 'knife'
 IV_TAKE = None
 JACKET_TAKE = None
@@ -74,6 +76,8 @@ class SoundPlayer:
 	def music_menu(self):
 		self._play_music(MUSIC_MENU)
 
+	def music_title(self):
+		self._play_music(MUSIC_TITLE)
 		
 
 
