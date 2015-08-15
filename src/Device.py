@@ -52,13 +52,13 @@ class Device:
 		ratio = 1.0
 		for furn in self.playboard.model.furniture:
 			if furn[0] == '4':
-				ratio += 0.03
+				ratio *= 1.03
 			elif furn[0] == '1':
 				dx = self.x - (furn[1] + .5) * 32
 				dy = self.y - (furn[2] + .5) * 32
 				dist = (dx ** 2 + dy ** 2) ** .5
 				if dist <= 32 * 3:
-					ratio *= 1.05
+					ratio *= 1.02
 			elif furn[0] == '3':
 				#print furn, self.x, self.y
 				dx = self.x - (furn[1] + .5) * 32
@@ -66,7 +66,7 @@ class Device:
 				dist = (dx ** 2 + dy ** 2) ** .5
 				#print 'distance', dist
 				if dist <= 32 * 3:
-					ratio *= 1.15
+					ratio *= 1.10
 				
 		#print ratio
 		self.treatment_ratio = ratio

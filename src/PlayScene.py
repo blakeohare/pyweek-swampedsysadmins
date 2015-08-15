@@ -6,6 +6,7 @@ from src.Model import Model
 from src.FontEngine import TEXT
 from src.menus.WrapperMenu import WrapperMenu
 from src.menus.OptionsMenu import OptionsMenu
+from src.menus.YouLose import YouLose
 from src.Reward import Reward
 from src.Sound import SND
 
@@ -30,6 +31,9 @@ class PlayScene:
 		if self.first:
 			self.first = False
 			SND.music_game()
+		
+		if self.model.budget < 0:
+			self.next = YouLose(self)
 		
 		events = self.filter_hover_ui_events(events, mouse_coords)
 		self.board.update(events)
