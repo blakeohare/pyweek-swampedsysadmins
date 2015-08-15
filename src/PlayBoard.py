@@ -350,10 +350,10 @@ class PlayBoard:
 					if not current_devices.get(str(x) + '-' + str(y), False):
 						allow = True
 						if foosball != None:
-							dx = x - foosball[0]
+							dx = x - foosball[0] + 1
 							dy = y - foosball[1]
 							dist = (dx ** 2 + dy ** 2) ** .5
-							if dist < 5:
+							if dist < 4:
 								allow = False
 						if allow:
 							potential.append((x, y))
