@@ -1,3 +1,5 @@
+MULTIPLIER = 3 # This will duplicate the current set of sprites this many times. Ideally this should be 1 when there are more sprites. 
+
 import pygame
 import os
 
@@ -33,14 +35,15 @@ pygame.display.set_mode((400, 400))
 
 templates = get_template_names()
 width = 16 * 20 # nsew * (stand + 0123)
-height = len(templates) * 32
+height = len(templates) * 32 * MULTIPLIER
 
 output = pygame.Surface((width, height)).convert()
 output.fill((255, 0, 255))
 
 y = 0
 
-for template in templates:
+for i in range(len(templates) * MULTIPLIER):
+	template = templates[i % len(templates)]
 	x = 0
 	for dir in list('nsew'):
 		for frame in [0, 1, 0, 2, 0]:
