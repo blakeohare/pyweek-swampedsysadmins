@@ -34,7 +34,7 @@ Mouse or touchscreen.  That's it.
 
 License
 -------
-FIXME: License
+None.  This game is public domain.
 
 
 Credits (alphabetical)
