@@ -18,7 +18,7 @@ class Session:
 		self.end = 10 * 30 # 10 seconds
 		self.device_count_override = 3
 		
-		
+		self.employee_anger = None
 		
 		self.devices = []
 		self.active_devices = []
@@ -150,3 +150,29 @@ class Session:
 		
 		self.counter += 1
 	
+	def get_current_angry_employee(self):
+		if self.employee_anger == None:
+			if self.events == None or len(self.events) == 0:
+				return None
+			employees = []
+			events = []
+			for event in self.events:
+				if event[0] == 'device':
+					events.append((random.choice(list('123')), event[1]))
+			for i in range(11):
+				for event in events:
+					emp, t = event
+					t1 = t - i
+					t2 = t + i
+					while len(employees) < t2 + 5:
+						employees.append(None)
+					
+					if employees[t1] == None:
+						employees[t1] = emp
+					if employees[t2] == None:
+						employees[t2] = emp
+			self.employee_anger = employees
+		
+		if self.counter < len(self.employee_anger):
+			return self.employee_anger[self.counter]
+		return None

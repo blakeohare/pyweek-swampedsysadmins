@@ -425,7 +425,9 @@ class PlayBoard:
 			'j': self.model.inventory_jackets > 0
 		}
 		
-		ROOM_RENDERER.render(screen, rc, self.model.session.active_devices, staff, self.interesting_coords, supplies, self.animations, False)
+		employee = self.model.session.get_current_angry_employee()
+		
+		ROOM_RENDERER.render(screen, rc, self.model.session.active_devices, staff, self.interesting_coords, supplies, self.animations, False, employee)
 		
 		
 	

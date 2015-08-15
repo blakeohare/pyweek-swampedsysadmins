@@ -8,12 +8,20 @@ class RoomRenderer:
 	def __init__(self):
 		pass
 		
-	def render(self, screen, rc, nullable_devices, nullable_staff, interesting_coords, nullable_supplies, mutable_animations, show_influence_radius):
+	def render(self, screen, rc, nullable_devices, nullable_staff, interesting_coords, nullable_supplies, mutable_animations, show_influence_radius, angry_employee_num):
 		
 		render_list = []
 		
-		bg = IMAGES.get('the_room.png')
+		if angry_employee_num == None:
+			bg = IMAGES.get('the_room.png')
+		else:
+			bg = IMAGES.get('open_door_from_which_horribly_broken_devices_spew_forth.png')
+		
 		render_list.append(('I', -1, bg, 0, 0))
+		
+		if angry_employee_num != None:
+			emp = IMAGES.get('angry_employee' + str(angry_employee_num) + '.png')
+			render_list.append(('I', 0, emp, 440, 0))
 		
 		if nullable_staff != None:
 			for member in nullable_staff:
