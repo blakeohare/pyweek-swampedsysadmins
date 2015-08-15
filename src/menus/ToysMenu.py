@@ -4,6 +4,8 @@ from src.menus.UiElement import create_ui_image
 from src.menus.UiElement import create_ui_image_list
 from src.menus.UiElement import create_ui_hover_region
 
+from src.menus.PlaceFurniture import PlaceFurnitureMenu
+
 from src.ImageLibrary import IMAGES
 
 LAVA_PRICE = 50
@@ -51,11 +53,11 @@ class ToysMenu:
 			
 			bean_bag_image = create_ui_image(IMAGES.get('furniture/bean_bag.png'), col1 + 16, row2)
 			elements.append(bean_bag_image)
-			elements.append(create_ui_button('$' + str(BEAN_BAG_PRICE), self.buy_plant, col1, row2 + 70, 100, 24, lambda:self.can_afford(BEAN_BAG_PRICE)))
+			elements.append(create_ui_button('$' + str(BEAN_BAG_PRICE), self.buy_bean_bag, col1, row2 + 70, 100, 24, lambda:self.can_afford(BEAN_BAG_PRICE)))
 			
 			foosball_image = create_ui_image(IMAGES.get('furniture/foosball.png'), col2, row2)
 			elements.append(foosball_image)
-			elements.append(create_ui_button('$' + str(FOOSBALL_PRICE), self.buy_plant, col2, row2 + 70, 100, 24, lambda:self.can_afford(FOOSBALL_PRICE)))
+			elements.append(create_ui_button('$' + str(FOOSBALL_PRICE), self.buy_foosball, col2, row2 + 70, 100, 24, lambda:self.can_afford(FOOSBALL_PRICE)))
 			
 			description = create_ui_text('Mouse over item for description.', 'white', col1, row3 - 32)
 			elements.append(description)
@@ -78,13 +80,19 @@ class ToysMenu:
 		return self.elements
 	
 	def buy_lava(self):
-		pass
+		self.parent.next = PlaceFurnitureMenu(self.model, self.parent, '1')
 	
 	def buy_plush(self):
-		pass
+		self.parent.next = PlaceFurnitureMenu(self.model, self.parent, '2')
 	
 	def buy_plant(self):
-		pass
+		self.parent.next = PlaceFurnitureMenu(self.model, self.parent, '3')
+	
+	def buy_bean_bag(self):
+		self.parent.next = PlaceFurnitureMenu(self.model, self.parent, '4')
+	
+	def buy_foosball(self):
+		self.parent.next = PlaceFurnitureMenu(self.model, self.parent, '5')
 	
 	def can_afford(self, price):
 		return self.model.budget >= price

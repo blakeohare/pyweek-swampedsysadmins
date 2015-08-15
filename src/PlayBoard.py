@@ -66,7 +66,7 @@ office_width = len(office_rows[0])
 INTERESTING_COORDS = {}
 
 # session is nullable
-def build_office_map(session, interesting_coords_out):
+def build_office_map(session, interesting_coords_out, model):
 
 	interesting_coords = {}
 	output = make_grid(office_width, office_height)
@@ -85,7 +85,11 @@ def build_office_map(session, interesting_coords_out):
 		y += 1
 	
 	blocking = TILE_MANIFEST['x']
-	for interesting in interesting_coords.keys():
+	furniture = []
+	for mf in model.furniture:
+		interesting_coords[mf[0]] = (mf[1], mf[2])
+	
+	for interesting in list(interesting_coords.keys()) + furniture:
 		if interesting == 'i':
 			if session == None or session.is_iv_available():
 				x, y = interesting_coords[interesting]
@@ -110,6 +114,23 @@ def build_office_map(session, interesting_coords_out):
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
 				interesting_coords_out['j'] = (x, y)
+		elif interesting in '12345':
+			x, y = interesting_coords[interesting]
+			interesting_coords_out[interesting] = (x, y)
+			width, height = {
+				'1': (1, 1),
+				'2': (2, 1),
+				'3': (1, 1),
+				'4': (2, 2),
+				'5': (3, 2)
+			}[interesting]
+			xstart = x
+			ystart = y
+			xend = x + width
+			yend = y + height
+			for x in range(xstart, xend):
+				for y in range(ystart, yend):
+					output[x][y] = blocking
 	
 	return output
 			
@@ -117,7 +138,7 @@ def build_office_map(session, interesting_coords_out):
 class PlayBoard:
 	def __init__(self, model):
 		self.interesting_coords = {}
-		self.office = build_office_map(model.session, self.interesting_coords)
+		self.office = build_office_map(model.session, self.interesting_coords, model)
 		self.selected = None
 		self.model = model
 		self.drag_descriptor = []

@@ -31,40 +31,54 @@ class RoomRenderer:
 			
 			has_any = nullable_supplies == None or nullable_supplies.get(key, True) # default to true for placement screen
 			if key == 'i':
-				file = 'ivs'
+				file = 'treatments/ivs'
 			elif key == 'c':
-				file = 'cucumber_station'
+				file = 'treatments/cucumber_station'
 				x += .3
 			elif key == 't':
-				file = 'tape_shelf'
+				file = 'treatments/tape_shelf'
 			elif key == 'j':
-				file = 'jacket_rack'
+				file = 'treatments/jacket_rack'
+			elif key == '1':
+				file = 'furniture/lava_lamp' + str((rc // 5) % 4)
+			elif key == '2':
+				file = 'furniture/the_doll'
+			elif key == '3':
+				file = 'furniture/potted_flower'
+			elif key == '4':
+				file = 'furniture/bean_bag'
+			elif key == '5':
+				file = 'furniture/foosball'
 			
-			path = 'treatments/' + file + '_' + ('full' if has_any else 'empty') + '.png'
+			if key in ('i', 'c', 't', 'j'):
+				path = file + '_' + ('full' if has_any else 'empty') + '.png'
+			else:
+				path = file + '.png'
 			img = IMAGES.get(path)
 			render_list.append(('I', (y + 1) * 32 * 1000000, img, int(x * 32), (y + 1) * 32 - img.get_height()))
-		
-		i = 0
-		while i < len(mutable_animations):
-			animation = mutable_animations[i]
-			images = []
-			if animation['type'] == 'device':
-				images.append(IMAGES.get('devices/' + animation['device'] + '.png'))
-				images.append(IMAGES.get('devices/' + animation['overlay'] + '.png'))
-			ttl = animation['ttl']
-			ttl -= 1
-			animation['ttl'] = ttl
-			
-			for img in images:
-				render_list.append(('I', animation['mx'] + animation['my'] * 1000000, img, animation['x'] - img.get_width() // 2, animation['y'] - img.get_height()))
+
+		if mutable_animations != None:
+			i = 0
+			while i < len(mutable_animations):
+				animation = mutable_animations[i]
+				images = []
+				if animation['type'] == 'device':
+					images.append(IMAGES.get('devices/' + animation['device'] + '.png'))
+					images.append(IMAGES.get('devices/' + animation['overlay'] + '.png'))
+				ttl = animation['ttl']
+				ttl -= 1
+				animation['ttl'] = ttl
 				
-			animation['x'] += animation['vx']
-			animation['y'] += animation['vy']
-			
-			if ttl > 0:
-				i += 1
-			else:
-				mutable_animations.pop(i)
+				for img in images:
+					render_list.append(('I', animation['mx'] + animation['my'] * 1000000, img, animation['x'] - img.get_width() // 2, animation['y'] - img.get_height()))
+					
+				animation['x'] += animation['vx']
+				animation['y'] += animation['vy']
+				
+				if ttl > 0:
+					i += 1
+				else:
+					mutable_animations.pop(i)
 
 		self.draw_to_screen(screen, render_list)
 

@@ -19,6 +19,8 @@ class Model:
 		self.inventory_phones = 3
 		self.inventory_tablets = 3
 		
+		self.furniture = []
+		
 		
 	def increment_level(self):
 		level_id = self.session.level + 1
