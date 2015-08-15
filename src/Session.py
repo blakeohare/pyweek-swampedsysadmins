@@ -15,14 +15,9 @@ class Session:
 		self.device_count_override = None
 		self.required_events = []
 		
-		#self.end = 10 * 30 # 10 seconds
+		self.end = 10 * 30 # 10 seconds
+		self.device_count_override = 3
 		
-		####### HACK TO SPEED THINGS UP ########
-		if IS_DEBUG:
-			self.end = 30 * 3 # 5 seconds
-			self.required_events = ['sad', 'angry', 'sick', 'crazy', 'unknown']
-			self.device_count_override = len(self.required_events)
-			
 		
 		
 		self.devices = []
@@ -46,8 +41,8 @@ class Session:
 		if self.level > 0:
 			total = 5 + 5 * self.level
 			
-			#if self.device_count_override != None:
-			#	total = self.device_count_override
+			if self.device_count_override != None:
+				total = self.device_count_override
 			
 			
 			if IS_DEBUG:
