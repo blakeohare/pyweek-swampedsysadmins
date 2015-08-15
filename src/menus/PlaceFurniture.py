@@ -1,4 +1,5 @@
 import pygame
+import math
 
 from src.Util import *
 from src.PlayBoard import build_office_map
@@ -65,17 +66,17 @@ class PlaceFurnitureMenu:
 		
 		self.current_valid_coord = None
 		
-		if self.item_type != None and col >= 8 and col < 19 and row >= 2 and row < 14:
+		if self.item_type != None and col >= 8 and col < 18 and row >= 2 and row < 14:
 			# check to see if full range is unblocked
 			start_x = col
-			start_y = row
-			end_x = col + self.item_size[0]
-			end_y = row + self.item_size[1]
+			end_y = row
+			end_x = col + self.item_size[0] - 1
+			start_y = end_y - self.item_size[1] + 1
 			
 			available = True
 			for x in range(start_x, end_x + 1):
 				for y in range(start_y, end_y + 1):
-					if x < 19 and y < 14:
+					if x < 18 and y < 14:
 						if not self.grid[x][y].passable:
 							available = False
 							break
@@ -92,8 +93,8 @@ class PlaceFurnitureMenu:
 			elif event.mouseup and self.mouse_down:
 				if self.current_valid_coord != None:
 					self.base_interesting_coords[self.item_type] = self.current_valid_coord
-					self.next = PlaceFurnitureMenu(self.model, self.return_scene, None)
 					self.model.furniture.append((self.item_type, self.current_valid_coord[0], self.current_valid_coord[1]))
+					self.next = PlaceFurnitureMenu(self.model, self.return_scene, None)
 					return
 				
 	
@@ -104,5 +105,11 @@ class PlaceFurnitureMenu:
 		
 		ROOM_RENDERER.render(screen, rc, None, None, interesting_coords, None, None)
 		
-		TEXT.render(screen, 'Done', 'yellow' if self.is_over_done else 'white', 8, 8)
+		text = 'Cancel'
+		yoffset = 0
+		if self.item_type == None:
+			text = 'Done'
+			yoffset = -int(abs(math.sin(rc * 2 * 3.14159 / 30) * 5))
+		
+		TEXT.render(screen, text, 'yellow' if self.is_over_done else 'white', 8, 8 + yoffset)
 		
