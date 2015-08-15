@@ -94,7 +94,7 @@ class Staff:
 						images[key] = img
 						x += 32
 			self.images = images
-			print self.images.keys()
+			
 		if self.moving:
 			return images['walk_' + self.direction + str((rc // 3) & 3)]
 		return images['stand_' + self.direction]
