@@ -1,4 +1,4 @@
-MUSIC_GAMEPLAY = 'RingOfSpinningElephants, RingOfSpinningElephants'
+MUSIC_GAMEPLAY = 'RingOfSpinningElephants, TheTransistorProletariat'
 
 MUSIC_MENU = '1LOfMilk'
 
