@@ -9,7 +9,7 @@ class Session:
 		self.phones_fixed = 0
 		self.tablets_fixed = 0
 		
-		IS_DEBUG = True
+		IS_DEBUG = False
 		
 		self.end = 30 * 60 * 2 # 2 minutes
 		self.device_count_override = None

@@ -50,7 +50,7 @@ class Device:
 	
 	def update(self):
 		self.state_counter += 1
-		self.ttl -= 4
+		self.ttl -= 1
 		if self.state == 'flying':
 			self.ttl = STARTING_TTL # still immune to the aging process while flying through the air
 			progress = 1.0 * self.state_counter / FLYING_FRAMES
