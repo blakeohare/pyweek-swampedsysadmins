@@ -5,6 +5,7 @@ from src.constants import *
 from src.menus.TitleScene import TitleScene
 from src.Event import Event
 from src.MagicPotato import MAGIC_POTATO
+from src.Sound import SND
 
 def main():
 
@@ -29,7 +30,9 @@ def main():
 				real_screen = pygame.display.set_mode((800, 600), pygame.FULLSCREEN)
 			else:
 				real_screen = pygame.display.set_mode(SCREEN_SIZE, resizeable)
-				
+		
+		SND.ensure_music_volume()
+			
 		events = []
 		last_mouse_event = None
 		for e in pygame.event.get():

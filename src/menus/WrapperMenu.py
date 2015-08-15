@@ -8,6 +8,7 @@ from src.menus.OrderMenu import OrderMenu
 from src.menus.ScoreMenu import ScoreMenu
 from src.menus.ToysMenu import ToysMenu
 from src.menus.UiElement import *
+from src.Sound import SND
 
 MENU_LEFT = 50
 MENU_TOP = 50
@@ -18,6 +19,7 @@ MENU_HEIGHT = GAME_HEIGHT - MENU_TOP * 2
 class WrapperMenu:
 	def __init__(self, bg, model):
 		self.next = None
+		self.first = True
 		self.bg = bg
 		self.model = model
 		self.session = model.session
@@ -41,6 +43,10 @@ class WrapperMenu:
 		self.elements = None
 	
 	def update(self, events, mouse_xy):
+		if self.first:
+			self.first = False
+			SND.music_menu()
+			
 		self.mouse_xy = mouse_xy
 		for event in events:
 			if event.mousedown:

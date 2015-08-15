@@ -7,6 +7,7 @@ from src.FontEngine import TEXT
 from src.menus.WrapperMenu import WrapperMenu
 from src.menus.OptionsMenu import OptionsMenu
 from src.Reward import Reward
+from src.Sound import SND
 
 MENU_LINK_SIZE = (16 * 5, 20)
 
@@ -22,8 +23,13 @@ class PlayScene:
 		self.active_button = None
 		self.mouse_xy = (99999, 999999)
 		self.last_shown_budget = self.model.budget
+		self.first = True
 	
 	def update(self, events, mouse_coords):
+		
+		if self.first:
+			self.first = False
+			SND.music_game()
 		
 		events = self.filter_hover_ui_events(events, mouse_coords)
 		self.board.update(events)
