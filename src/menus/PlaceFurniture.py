@@ -6,6 +6,12 @@ from src.PlayBoard import build_office_map
 from src.RoomRenderer import ROOM_RENDERER
 from src.FontEngine import TEXT
 
+LAVA_PRICE = 50
+PLUSH_PRICE = 75
+PLANT_PRICE = 100
+BEAN_BAG_PRICE = 200
+FOOSBALL_PRICE = 500
+
 
 # 1 - lava lamp 1x1
 # 2 - plush 2x1
@@ -94,7 +100,17 @@ class PlaceFurnitureMenu:
 					self.mouse_down = True
 			elif event.mouseup and self.mouse_down:
 				if self.current_valid_coord != None:
-					#self.base_interesting_coords[self.item_type] = self.current_valid_coord
+					
+					price = {
+						'1': LAVA_PRICE,
+						'2': PLUSH_PRICE,
+						'3': PLANT_PRICE,
+						'4': BEAN_BAG_PRICE,
+						'5': FOOSBALL_PRICE }[self.item_type]
+					
+					self.model.budget -= price
+					
+					
 					self.model.furniture.append((self.item_type, self.current_valid_coord[0], self.current_valid_coord[1]))
 					self.next = PlaceFurnitureMenu(self.model, self.return_scene, None)
 					return

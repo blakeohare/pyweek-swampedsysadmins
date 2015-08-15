@@ -8,6 +8,7 @@ from src.menus.PlaceFurniture import PlaceFurnitureMenu
 
 from src.ImageLibrary import IMAGES
 
+# Duplicated in PlaceFurniture.py
 LAVA_PRICE = 50
 PLUSH_PRICE = 75
 PLANT_PRICE = 100
