@@ -91,6 +91,13 @@ class PlayScene:
 				y += 15
 		
 		self.render_hover_ui(screen, rc)
+		
+		level = self.model.session.level
+		if level == 0:
+			header = 'New Employee Training'
+		else:
+			header = 'Day ' + str(level)
+		TEXT.render(screen, header, 'white', 300, 4)
 	
 	def filter_hover_ui_events(self, events, mouse_xy):
 		hb = self.hover_buttons
