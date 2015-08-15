@@ -322,18 +322,46 @@ class PlayBoard:
 		
 		return None if len(output) == 0 else output
 	
-	def get_random_open_tile(self):
+	def get_random_open_tile(self, allow_overlap=False):
 		# this isn't called very often so it can be stupid and brute force
 		potential = []
+		
+		current_devices = {}
+		if not allow_overlap:
+			for device in self.model.session.active_devices:
+				x = device.x // 32
+				y = device.y // 32
+				
+				for dx in (x - 1, x, x + 1):
+					for dy in (y - 1, y, y + 1):
+						current_devices[str(dx) + '-' + str(dy)] = True
+		
+		foosball = None
+		for furn in self.model.furniture:
+			if furn[0] == '5':
+				foosball = (furn[1], furn[2])
+		
 		y = 4
 		while y <= 14:
 			x = 10
 			while x <= 18:
 				tile = self.office[x][y]
 				if tile != None and tile.passable:
-					potential.append((x, y))
+					if not current_devices.get(str(x) + '-' + str(y), False):
+						allow = True
+						if foosball != None:
+							dx = x - foosball[0]
+							dy = y - foosball[1]
+							dist = (dx ** 2 + dy ** 2) ** .5
+							if dist < 5:
+								allow = False
+						if allow:
+							potential.append((x, y))
 				x += 1
 			y += 1
+		
+		if not allow_overlap and len(potential) == 0:
+			return self.get_random_open_tile(True)
 		random.shuffle(potential)
 		return potential[0]
 		
