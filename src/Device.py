@@ -88,8 +88,6 @@ class Device:
 					else:
 						self.model.special_order_laptop()
 					
-				
-			self.resolution = 'replaced' # TODO: this needs to be dependent on whether you have enough reserves
 		elif self.state == 'ailed':
 			if self.ailment == 'unknown':
 				for staff in self.playboard.model.staff:

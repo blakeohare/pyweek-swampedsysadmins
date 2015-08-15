@@ -15,6 +15,8 @@ class Session:
 		self.device_count_override = None
 		self.required_events = []
 		
+		self.end = 10 * 30
+		
 		####### HACK TO SPEED THINGS UP ########
 		if IS_DEBUG:
 			self.end = 30 * 3 # 5 seconds
