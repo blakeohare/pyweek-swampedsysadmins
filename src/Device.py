@@ -44,10 +44,32 @@ class Device:
 		self.playboard = playboard
 		self.model = playboard.model
 		self.replaced = False
+		self.treatment_ratio = 1.0
 	
 	def start_treatment(self):
 		self.state = 'treated'
 		self.state_counter = 0
+		ratio = 1.0
+		for furn in self.playboard.model.furniture:
+			if furn[0] == '4':
+				ratio += 0.03
+			elif furn[0] == '1':
+				dx = self.x - (furn[1] + .5) * 32
+				dy = self.y - (furn[2] + .5) * 32
+				dist = (dx ** 2 + dy ** 2) ** .5
+				if dist <= 32 * 3:
+					ratio *= 1.05
+			elif furn[0] == '3':
+				#print furn, self.x, self.y
+				dx = self.x - (furn[1] + .5) * 32
+				dy = self.y - (furn[2] + .5) * 32
+				dist = (dx ** 2 + dy ** 2) ** .5
+				#print 'distance', dist
+				if dist <= 32 * 3:
+					ratio *= 1.15
+				
+		#print ratio
+		self.treatment_ratio = ratio
 	
 	def update(self):
 		self.state_counter += 1
@@ -115,7 +137,7 @@ class Device:
 			elif self.ailment == 'unknown':
 				treat_time = UNKNOWN_TREAT_TIME
 			
-			if self.state_counter >= treat_time:
+			if self.state_counter * self.treatment_ratio >= treat_time:
 				self.state = 'new'
 				self.resolution = 'treated'
 				self.state_counter = 0
@@ -163,6 +185,9 @@ class Device:
 				self.draw_image(render_list, IMAGES.get('devices/' + self.device_type + '_straightjacket.png'), sort_key, self.x, self.y)
 			else:
 				raise Exception("No rendering code for ailment treatment.")
+			
+			counter = int(self.treatment_ratio * self.state_counter)
+			if counter > treatment_time: counter = treatment_time
 			
 			progress_bar = [
 				(0, 255, 0),
