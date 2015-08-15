@@ -210,7 +210,7 @@ class PlayBoard:
 		
 		output = []
 		for staff in self.model.staff:
-			if bins.get('i') != None and (staff.holding == None or staff.holding == 'iv'):
+			if bins.get('i') != None and (staff.holding == None or staff.holding == 'iv') and self.model.inventory_ivs > 0:
 				x, y = bins['i']
 				x += 1
 				y += 1
@@ -235,7 +235,7 @@ class PlayBoard:
 					}
 					output.append(button)
 					
-			if bins.get('c') != None and (staff.holding == None or staff.holding == 'cucumber'):
+			if bins.get('c') != None and (staff.holding == None or staff.holding == 'cucumber') and self.model.inventory_cucumbers > 0:
 				x, y = bins['c']
 				x += 1
 				y += 1
@@ -259,7 +259,7 @@ class PlayBoard:
 					}
 					output.append(button)
 				
-			if bins.get('t') != None and (staff.holding == None or staff.holding == 'tape'):
+			if bins.get('t') != None and (staff.holding == None or staff.holding == 'tape') and self.model.inventory_tapes > 0:
 				x, y = bins['t']
 				x += 1
 				y += 1
@@ -283,7 +283,7 @@ class PlayBoard:
 					}
 					output.append(button)
 				
-			if bins.get('j') != None and (staff.holding == None or staff.holding == 'jacket'):
+			if bins.get('j') != None and (staff.holding == None or staff.holding == 'jacket') and self.model.inventory_jackets > 0:
 				x, y = bins['j']
 				x += 1
 				y += 1

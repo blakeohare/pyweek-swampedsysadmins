@@ -15,8 +15,8 @@ class Session:
 		self.device_count_override = None
 		self.required_events = []
 		
-		self.end = 10 * 30 # 10 seconds
-		self.device_count_override = 3
+		#self.end = 10 * 30 # 10 seconds
+		#self.device_count_override = 3
 		
 		self.employee_anger = None
 		
@@ -39,7 +39,7 @@ class Session:
 		
 		self.total_devices = 0
 		if self.level > 0:
-			total = 5 + 5 * self.level
+			total = 5 + 2 * self.level
 			
 			if self.device_count_override != None:
 				total = self.device_count_override
