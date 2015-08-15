@@ -139,7 +139,29 @@ class PlayScene:
 		self.next = OptionsMenu(self)
 	
 	def perform_hover_ui_click(self, id):
-		if id.startswith('iv_take_'):
+		if '_drop_' in id:
+			if id.startswith('iv_drop_'):
+				self.model.inventory_ivs += 1
+				staff_member = self.get_staff_member(id[len('iv_drop_'):])
+				staff_member.holding = None
+				return
+			elif id.startswith('cuc_drop_'):
+				self.model.inventory_cucumbers += 1
+				staff_member = self.get_staff_member(id[len('cuc_drop_'):])
+				staff_member.holding = None
+				return
+			elif id.startswith('tape_drop_'):
+				self.model.inventory_tapes += 1
+				staff_member = self.get_staff_member(id[len('tape_drop_'):])
+				staff_member.holding = None
+				return
+			elif id.startswith('jacket_drop_'):
+				self.model.inventory_jackets += 1
+				staff_member = self.get_staff_member(id[len('jacket_drop_'):])
+				staff_member.holding = None
+				return
+		
+		elif id.startswith('iv_take_'):
 			if self.model.inventory_ivs > 0:
 				staff_member = self.get_staff_member(id[len('iv_take_'):])
 				staff_member.holding = 'iv'

@@ -210,7 +210,7 @@ class PlayBoard:
 		
 		output = []
 		for staff in self.model.staff:
-			if bins.get('i') != None and staff.holding == None:
+			if bins.get('i') != None and (staff.holding == None or staff.holding == 'iv'):
 				x, y = bins['i']
 				x += 1
 				y += 1
@@ -218,16 +218,24 @@ class PlayBoard:
 				y *= 32
 				dx = staff.x - x
 				dy = staff.y - y
+				
 				if dx ** 2 + dy ** 2 < 48 ** 2:
+					if staff.holding == None:
+						command = 'iv_take_' + str(staff.id)
+						label = 'Take IV'
+					else:
+						command = 'iv_drop_' + str(staff.id)
+						label = 'Put back'
+					
 					button = {
-						'id': 'iv_take_' + str(staff.id),
-						'label': 'Take IV',
+						'id': command,
+						'label': label,
 						'x': x,
 						'y': y - 50
 					}
 					output.append(button)
 					
-			if bins.get('c') != None and staff.holding == None:
+			if bins.get('c') != None and (staff.holding == None or staff.holding == 'cucumber'):
 				x, y = bins['c']
 				x += 1
 				y += 1
@@ -236,15 +244,22 @@ class PlayBoard:
 				dx = staff.x - x
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
+					if staff.holding == None:
+						command = 'cuc_take_' + str(staff.id)
+						label = 'Take Cucumbers'
+					else:
+						command = 'cuc_drop_' + str(staff.id)
+						label = 'Put back'
+					
 					button = {
-						'id': 'cuc_take_' + str(staff.id),
-						'label': 'Take Cucumbers',
+						'id': command,
+						'label': label,
 						'x': x,
 						'y': y - 50
 					}
 					output.append(button)
 				
-			if bins.get('t') != None and staff.holding == None:
+			if bins.get('t') != None and (staff.holding == None or staff.holding == 'tape'):
 				x, y = bins['t']
 				x += 1
 				y += 1
@@ -253,15 +268,22 @@ class PlayBoard:
 				dx = staff.x - x
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
+					if staff.holding == None:
+						command = 'tape_take_' + str(staff.id)
+						label = 'Pick Tape'
+					else:
+						command = 'tape_drop_' + str(staff.id)
+						label = 'Put back'
+					
 					button = {
-						'id': 'tape_take_' + str(staff.id),
-						'label': 'Pick Tape',
+						'id': command,
+						'label': label,
 						'x': x,
 						'y': y - 50
 					}
 					output.append(button)
 				
-			if bins.get('j') != None and staff.holding == None:
+			if bins.get('j') != None and (staff.holding == None or staff.holding == 'jacket'):
 				x, y = bins['j']
 				x += 1
 				y += 1
@@ -270,9 +292,16 @@ class PlayBoard:
 				dx = staff.x - x
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
+					if staff.holding == None:
+						command = 'jacket_take_' + str(staff.id)
+						label = 'Take Jacket'
+					else:
+						command = 'jacket_drop_' + str(staff.id)
+						label = 'Put back'
+					
 					button = {
-						'id': 'jacket_take_' + str(staff.id),
-						'label': 'Take Jacket',
+						'id': command,
+						'label': label,
 						'x': x,
 						'y': y - 50
 					}
