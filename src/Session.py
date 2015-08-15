@@ -89,6 +89,11 @@ class Session:
 		self.events.sort(key = lambda x:x[1])
 		self.staff_randomized = False
 	
+	def induce_device(self, type, ailment):
+		self.counter = 10
+		self.events = [('device', 20, type, ailment)]
+		self.employee_anger = None
+	
 	def get_events_for_frame(self):
 		if len(self.events) > 0 and self.counter >= self.events[0][1]:
 			event = self.events.pop(0)

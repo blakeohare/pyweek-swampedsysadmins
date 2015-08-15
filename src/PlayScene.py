@@ -29,17 +29,46 @@ class PlayScene:
 		self.first = True
 		self.enable_tutorial = level_id == 0
 		self.tut_last = -1
+		self.tut_count = 0
+	
+	def do_tutorial_update(self):
+		self.tut_count += 1
+		
+		if self.tut_last == -1:
+			self.next = TextHover([
+				'\n'.join([
+					'Welcome #5779 to the IT department at',
+					'Zephyr, Pencil, & Bear International.',
+					'Your job is to fix malfunctioning',
+					'devices our employees bring to you.'])], self)
+			self.tut_last = 0
+			
+			self.model.session.induce_device('laptop', 'sick')
+		elif self.tut_last == 0:
+			if self.tut_count > 80:
+				
+				self.next = TextHover([
+					'\n'.join([
+						'This floating face above it means the',
+						'laptop is sick. We make sick devices',
+						'well again with an IV.']),
+					'\n'.join([
+						'Go get one from the medical supply ',
+						'bin in the corner.'])], self)
+				self.tut_last = 1
 	
 	def update(self, events, mouse_coords):
 		
+		
 		if self.first:
 			self.first = False
-			SND.music_game()
+			if self.enable_tutorial:
+				SND.music_tutorial()
+			else:
+				SND.music_game()
 		
 		if self.enable_tutorial:
-			if self.tut_last == -1:
-				self.next = TextHover(['hi\nthisisiatest', 'test'], self)
-				self.tut_last = 0
+			self.do_tutorial_update()
 		
 		if self.model.budget < 0:
 			self.next = YouLose(self)
