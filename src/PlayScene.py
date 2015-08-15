@@ -10,6 +10,8 @@ from src.menus.YouLose import YouLose
 from src.Reward import Reward
 from src.Sound import SND
 
+from src.menus.TextHover import TextHover
+
 MENU_LINK_SIZE = (16 * 5, 20)
 
 class PlayScene:
@@ -25,12 +27,19 @@ class PlayScene:
 		self.mouse_xy = (99999, 999999)
 		self.last_shown_budget = self.model.budget
 		self.first = True
+		self.enable_tutorial = level_id == 0
+		self.tut_last = -1
 	
 	def update(self, events, mouse_coords):
 		
 		if self.first:
 			self.first = False
 			SND.music_game()
+		
+		if self.enable_tutorial:
+			if self.tut_last == -1:
+				self.next = TextHover(['hi\nthisisiatest', 'test'], self)
+				self.tut_last = 0
 		
 		if self.model.budget < 0:
 			self.next = YouLose(self)
