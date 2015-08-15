@@ -77,7 +77,7 @@ class PlayScene:
 		
 		elif self.tut_last == 2:
 			device = self.model.session.active_devices[0]
-			if device.state_counter > 10 * 30:
+			if device.state_counter > 5 * 30:
 				device.state_counter = 300
 			if device.state == 'treated':
 				self.next = TextHover([
