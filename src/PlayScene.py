@@ -20,7 +20,7 @@ class PlayScene:
 		self.board = PlayBoard(self.model)
 		self.hover_buttons = None
 		self.active_button = None
-		self.mosue_xy = (99999, 999999)
+		self.mouse_xy = (99999, 999999)
 		self.last_shown_budget = self.model.budget
 	
 	def update(self, events, mouse_coords):
