@@ -28,7 +28,7 @@ class PlaceFurnitureMenu:
 		self.next = None
 		self.model = model
 		self.return_scene = return_scene
-		self.base_interesting_coords = {}
+		self.base_interesting_coords = []
 		self.grid = build_office_map(None, self.base_interesting_coords, model)
 		self.mouse_xy = (0, 0)
 		self.item_type = item_type
@@ -66,7 +66,7 @@ class PlaceFurnitureMenu:
 		
 		self.current_valid_coord = None
 		
-		if self.item_type != None and col >= 8 and col < 18 and row >= 2 and row < 14:
+		if self.item_type != None and col >= 8 and col < 19 and row >= 2 and row < 14:
 			# check to see if full range is unblocked
 			start_x = col
 			end_y = row
@@ -76,10 +76,12 @@ class PlaceFurnitureMenu:
 			available = True
 			for x in range(start_x, end_x + 1):
 				for y in range(start_y, end_y + 1):
-					if x < 18 and y < 14:
+					if x < 19 and y < 14:
 						if not self.grid[x][y].passable:
 							available = False
 							break
+					else:
+						available = False
 			
 			if available:
 				self.current_valid_coord = (col, row)
@@ -92,16 +94,16 @@ class PlaceFurnitureMenu:
 					self.mouse_down = True
 			elif event.mouseup and self.mouse_down:
 				if self.current_valid_coord != None:
-					self.base_interesting_coords[self.item_type] = self.current_valid_coord
+					#self.base_interesting_coords[self.item_type] = self.current_valid_coord
 					self.model.furniture.append((self.item_type, self.current_valid_coord[0], self.current_valid_coord[1]))
 					self.next = PlaceFurnitureMenu(self.model, self.return_scene, None)
 					return
 				
 	
 	def render(self, screen, rc):
-		interesting_coords = self.base_interesting_coords.copy()
+		interesting_coords = self.base_interesting_coords
 		if self.current_valid_coord != None:
-			interesting_coords[self.item_type] = self.current_valid_coord
+			interesting_coords = interesting_coords + [[self.item_type] + list(self.current_valid_coord)]
 		
 		ROOM_RENDERER.render(screen, rc, None, None, interesting_coords, None, None)
 		

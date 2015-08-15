@@ -68,7 +68,7 @@ INTERESTING_COORDS = {}
 # session is nullable
 def build_office_map(session, interesting_coords_out, model):
 
-	interesting_coords = {}
+	interesting_coords = []
 	output = make_grid(office_width, office_height)
 	y = 0
 	while y < office_height:
@@ -78,7 +78,7 @@ def build_office_map(session, interesting_coords_out, model):
 			id = row[x]
 			tile = TILE_MANIFEST.get(id, None)
 			if tile != None and tile.denoted:
-				interesting_coords[id] = (x, y)
+				interesting_coords.append((id, x, y))
 				tile = TILE_MANIFEST['.']
 			output[x][y] = tile
 			x += 1
@@ -87,43 +87,40 @@ def build_office_map(session, interesting_coords_out, model):
 	blocking = TILE_MANIFEST['x']
 	furniture = []
 	for mf in model.furniture:
-		interesting_coords[mf[0]] = (mf[1], mf[2])
+		interesting_coords.append((mf[0], mf[1], mf[2]))
 	
-	for interesting in list(interesting_coords.keys()) + furniture:
-		if interesting == 'i':
+	interesting_coords += furniture
+	
+	while len(interesting_coords_out) > 0:
+		interesting_coords_out.pop(0)
+	
+	for interesting in interesting_coords:
+		interesting_coords_out.append(interesting)
+		key, x, y = interesting
+		if key == 'i':
 			if session == None or session.is_iv_available():
-				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
-				interesting_coords_out['i'] = (x, y)
-		elif interesting == 'c':
+		elif key == 'c':
 			if session == None or session.is_cucumber_available():
-				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
-				interesting_coords_out['c'] = (x, y)
-		elif interesting == 't':
+		elif key == 't':
 			if session == None or session.is_tape_available():
-				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
-				interesting_coords_out['t'] = (x, y)
-		elif interesting == 'j':
+		elif key == 'j':
 			if session == None or session.is_jacket_available():
-				x, y = interesting_coords[interesting]
 				output[x][y] = blocking
 				output[x + 1][y] = blocking
-				interesting_coords_out['j'] = (x, y)
-		elif interesting in '12345':
-			x, y = interesting_coords[interesting]
-			interesting_coords_out[interesting] = (x, y)
+		elif key in '12345':
 			width, height = {
 				'1': (1, 1),
 				'2': (2, 1),
 				'3': (1, 1),
 				'4': (2, 2),
 				'5': (3, 2)
-			}[interesting]
+			}[key]
 			xstart = x
 			ystart = y
 			xend = x + width
@@ -137,7 +134,7 @@ def build_office_map(session, interesting_coords_out, model):
 
 class PlayBoard:
 	def __init__(self, model):
-		self.interesting_coords = {}
+		self.interesting_coords = []
 		self.office = build_office_map(model.session, self.interesting_coords, model)
 		self.selected = None
 		self.model = model
@@ -187,15 +184,16 @@ class PlayBoard:
 		self.level_completed = self.model.session.is_done()
 	
 	def get_hover_buttons(self):
-		iv_bin = self.interesting_coords.get('i', None)
-		cuc_bin = self.interesting_coords.get('c', None)
-		tape_bin = self.interesting_coords.get('t', None)
-		jacket_bin = self.interesting_coords.get('j', None)
+		bins = {}
+		for interesting in self.interesting_coords:
+			if interesting[0] in 'ictj':
+				key, x, y = interesting
+				bins[key] = (x, y)
 		
 		output = []
 		for staff in self.model.staff:
-			if iv_bin != None and staff.holding == None:
-				x, y = iv_bin
+			if bins.get('i') != None and staff.holding == None:
+				x, y = bins['i']
 				x += 1
 				y += 1
 				x *= 32
@@ -211,8 +209,8 @@ class PlayBoard:
 					}
 					output.append(button)
 					
-			if cuc_bin != None and staff.holding == None:
-				x, y = cuc_bin
+			if bins.get('c') != None and staff.holding == None:
+				x, y = bins['c']
 				x += 1
 				y += 1
 				x *= 32
@@ -228,8 +226,8 @@ class PlayBoard:
 					}
 					output.append(button)
 				
-			if tape_bin != None and staff.holding == None:
-				x, y = tape_bin
+			if bins.get('t') != None and staff.holding == None:
+				x, y = bins['t']
 				x += 1
 				y += 1
 				x *= 32
@@ -245,8 +243,8 @@ class PlayBoard:
 					}
 					output.append(button)
 				
-			if jacket_bin != None and staff.holding == None:
-				x, y = jacket_bin
+			if bins.get('j') != None and staff.holding == None:
+				x, y = bins['j']
 				x += 1
 				y += 1
 				x *= 32

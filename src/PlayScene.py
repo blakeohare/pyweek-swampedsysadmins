@@ -20,6 +20,7 @@ class PlayScene:
 		self.hover_buttons = None
 		self.active_button = None
 		self.mosue_xy = (99999, 999999)
+		self.last_shown_budget = self.model.budget
 	
 	def update(self, events, mouse_coords):
 		
@@ -36,10 +37,18 @@ class PlayScene:
 		
 		self.board.render(screen, rc, 0, 0, self.model.staff)
 		
+		budget = self.model.budget
+		display_budget = self.last_shown_budget
+		if abs(budget - display_budget) < 2:
+			display_budget = budget
+		else:
+			display_budget = (display_budget + budget) // 2
+		self.last_shown_budget = display_budget
+		
 		x = 8
 		y = 32 * 10 - 8
 		things = [
-			("Budget", self.model.budget, 'white'),
+			("Budget", display_budget, 'white'),
 			("IV's", self.model.inventory_ivs, 'blue'),
 			("Cucumbers", self.model.inventory_cucumbers, 'green'),
 			('Tapes', self.model.inventory_tapes, 'gray'),

@@ -26,8 +26,8 @@ class RoomRenderer:
 			for device in nullable_devices:
 				device.render(rc, render_list)
 			
-		for key in interesting_coords.keys():
-			x, y = interesting_coords[key]
+		for interesting in interesting_coords:
+			key, x, y = interesting
 			
 			has_any = nullable_supplies == None or nullable_supplies.get(key, True) # default to true for placement screen
 			if key == 'i':
