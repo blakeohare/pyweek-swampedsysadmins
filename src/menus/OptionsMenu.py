@@ -34,9 +34,9 @@ class OptionsMenu:
 				if self.currently_over in ['full_screen', 'back', 'main_menu']:
 					self.do_command(self.currently_over)
 				elif self.currently_over in ['sfx_volume', 'music_volume']:
-					self.mouse = 1
 					self.over = self.currently_over
 					self.do_sound(self.over)
+					self.mouse = 1
 			elif event.mouseup:
 				self.mouse = 0
 				self.over = None
@@ -63,12 +63,12 @@ class OptionsMenu:
 		width_over_two = GAME_WIDTH // 2
 		mx, my = self.cursor
 		if id == 'sfx_volume':
-			if mx < (width_over_two - 20): pass
+			if mx < (width_over_two - 20) and self.mouse == 0: pass
 			else:
 				MAGIC_POTATO.set_sound_volume((mx - width_over_two) // 2)
 				self.sfx_vol = MAGIC_POTATO.get_sound_volume()
 		elif id == 'music_volume':
-			if mx < (width_over_two - 20): pass
+			if mx < (width_over_two - 20) and self.mouse == 0: pass
 			else:
 				MAGIC_POTATO.set_music_volume((mx - width_over_two) // 2)
 				self.music_vol = MAGIC_POTATO.get_music_volume()
