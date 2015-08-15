@@ -20,13 +20,13 @@ class SoundPlayer:
 	def __init__(self):
 		self.sounds = {}
 		self.current_song = None
-		self.volume = MAGIC_POTATO.get_music_volume()
+		#self.volume = MAGIC_POTATO.get_music_volume()
 	
 	def ensure_music_volume(self):
-		vol = MAGIC_POTATO.get_music_volume()
-		if abs(self.volume - vol) > .001:
-			self.volume = vol
-			pygame.mixer.music.set_volume(vol)
+		potato_volume = MAGIC_POTATO.get_music_volume() / 100.0
+		mixer_volume = pygame.mixer.music.get_volume()
+		if abs(potato_volume - mixer_volume) > .001:
+			pygame.mixer.music.set_volume(potato_volume)
 	
 	def _play_music(self, id):
 		if id != None:
