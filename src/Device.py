@@ -3,6 +3,8 @@ import random
 
 from src.ImageLibrary import IMAGES
 
+from src.Sound import SND
+
 FLYING_FRAMES = 30
 START_X = 400
 START_Y = 30
@@ -141,6 +143,7 @@ class Device:
 				self.state = 'new'
 				self.resolution = 'treated'
 				self.state_counter = 0
+				SND.play_device_fix()
 		
 		if self.ttl < 0 and self.state != 'dead':
 			self.state = 'dead'

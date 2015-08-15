@@ -9,8 +9,10 @@ IV_TAKE = None
 JACKET_TAKE = None
 TAPE_TAKE = 'tape0, tape1'
 
-DEVICE_FIX = 'ding'
+DEVICE_FIX = 'ding' #', '.join(map(lambda x:('marimba-' + ('0' if (x < 10) else '') + str(x) + '.wav'), range(1, 17)))
 DEVICE_DEAD = None
+
+
 
 import pygame
 import os
@@ -49,12 +51,15 @@ class SoundPlayer:
 				snd = []
 				for t in id.split(','):
 					t = t.strip()
-					snd.append(pygame.mixer.Sound('sfx' + os.sep + CUCUMBER_TAKE + '.ogg'))
+					file = id
+					if not file.endswith('.wav'):
+						file += '.ogg'
+					snd.append(pygame.mixer.Sound('sfx' + os.sep + file))
 				self.sounds[id] = snd
 			
 			sound = None
 			if len(snd) == 1:
-				sound = snd
+				sound = snd[0]
 			elif len(snd) > 1:
 				sound = random.choice(snd)
 			
