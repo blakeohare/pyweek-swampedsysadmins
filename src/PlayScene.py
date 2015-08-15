@@ -57,6 +57,8 @@ class PlayScene:
 				
 				self.next = TextHover([
 					'\n'.join([
+						'This is a laptop.']),
+					'\n'.join([
 						'This floating face above it means the',
 						'laptop is sick. We make sick devices',
 						'well again with an IV.']),
