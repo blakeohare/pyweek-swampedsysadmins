@@ -89,8 +89,15 @@ class Session:
 		self.events.sort(key = lambda x:x[1])
 		self.staff_randomized = False
 	
+	def induce_device_storm(self):
+		self.counter = 5
+		self.events = []
+		for i in range(12):
+			self.events.append(('device', 6 + i, 'phone', random.choice(['sick', 'angry', 'unknown', 'crazy', 'sad'])))
+		self.employee_anger = None
+	
 	def induce_device(self, type, ailment):
-		self.counter = 10
+		self.counter = 5
 		self.events = [('device', 20, type, ailment)]
 		self.employee_anger = None
 	

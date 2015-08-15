@@ -30,6 +30,14 @@ class PlayScene:
 		self.enable_tutorial = level_id == 0
 		self.tut_last = -1
 		self.tut_count = 0
+		
+		if self.enable_tutorial:
+			self.model.budget = 10000
+			self.model.inventory_ivs = 5
+			self.model.inventory_cucumbers = 0
+			self.model.inventory_jackets = 0
+			self.model.inventory_tapes = 0
+			
 	
 	def do_tutorial_update(self):
 		self.tut_count += 1
@@ -56,9 +64,203 @@ class PlayScene:
 						'Go get one from the medical supply ',
 						'bin in the corner.'])], self)
 				self.tut_last = 1
+		elif self.tut_last == 1:
+			if self.model.staff[0].holding == 'iv':
+				self.next = TextHover([
+					'\n'.join([
+						'Now go back to the sick laptop and',
+						'treat it.'])], self)
+				self.tut_last = 2
+				self.tut_count = 0
+		
+		elif self.tut_last == 2:
+			device = self.model.session.active_devices[0]
+			if device.state_counter > 10 * 30:
+				device.state_counter = 300
+			if device.state == 'treated':
+				self.next = TextHover([
+					'\n'.join([
+						'Each treatment has a progress bar.',
+						'If the life bar above it runs out ',
+						'before the treatment finishes, the ',
+						'device dies. Do not let that happen.'])], self)
+				self.tut_last = 3
+				self.model.session.induce_device('laptop', 'sad')
+				self.model.inventory_cucumbers = 2
+				self.tut_count = 0
+		elif self.tut_last == 3:
+			if self.tut_count > 80:
+				self.next = TextHover([
+					'\n'.join([
+						'This laptop is not sick, but it is ',
+						'sad. It needs a spa treatment to ',
+						'cheer up. Go get a cucumber from the',
+						'table to the right of the IV bin.'])], self)
+				self.tut_last = 4
+				self.tut_count = 0
+		elif self.tut_last == 4:
+			device = self.model.session.active_devices[-1]
+			if device.state_counter > 10 * 30:
+				device.state_counter = 300
+			if device.state == 'treated':
+				self.next = TextHover([
+					'\n'.join([
+						'Notice that the spa treatment is ',
+						'slower than the IV. Each type of ',
+						'treatment takes a different length of',
+						'time, so plan accordingly.'])], self)
+				self.tut_last = 5
+				self.tut_count = 0
+				self.model.session.induce_device('tablet', 'angry')
+		elif self.tut_last == 5:
+			if self.tut_count > 80:
+				self.next = TextHover([
+					'\n'.join([
+						'This is a tablet.  Here at Zephyr,',
+						'Pencil, & Bear International, we ',
+						'fully embrace all computing ',
+						'paradigms, be they touch, voice, or',
+						'good old keyboard and mouse.']),
+
+					'\n'.join([
+						'This tablet is angry.  It needs a ',
+						'whale songs audio tape to calm down.',
+						'Go get one from the tape shelf.']),
+						
+					'\n'.join([
+						'We eagerly await the arrival of scent',
+						'based computing, so we can announce ',
+						'that we are the first in our industry',
+						'to adopt what will undoubtedly be a ',
+						'revolution in computing.'])], self)
+				self.model.inventory_tapes = 2
+				self.tut_last = 6
+				self.tut_count = 0
+		elif self.tut_last == 6:
+			device = self.model.session.active_devices[-1]
+			if device.state_counter > 10 * 30:
+				device.state_counter = 300
+			if device.state == 'treated':
+				self.next = TextHover([
+					'\n'.join([
+						'Tapes take longer than IVs and',
+						'spa treatments.'])], self)
+				self.tut_last = 7
+				self.tut_count = 0
+				self.model.inventory_jackets = 2
+				self.model.session.induce_device('phone', 'crazy')
+		elif self.tut_last == 7:
+			if self.tut_count > 80:
+				
+				self.next = TextHover([
+					'\n'.join([
+						'This is a phone.  It has gone crazy.',
+						'It needs a straitjacket to contain it',
+						'until it reboots.  Go get a jacket',
+						'from the coat rack.'])], self)
+				self.tut_last = 8
+				self.tut_count = 0
+			
+		elif self.tut_last == 8:
+			device = self.model.session.active_devices[-1]
+			if device.state_counter > 10 * 30:
+				device.state_counter = 300
+			if device.state == 'treated':
+				self.next = TextHover([
+					'\n'.join([
+						'Jackets are the slowest treatment.',
+						'That concludes the four treatment',
+						'types.'])], self)
+				self.tut_last = 9
+				self.tut_count = 0
+		elif self.tut_last == 9:
+			if len(self.model.session.active_devices) == 0:
+				self.next = TextHover([
+					'\n'.join([
+						'But wait! There is more!'])], self)
+				self.tut_last = 10
+				self.tut_count = 0
+				self.model.session.induce_device('phone', 'unknown')
+		elif self.tut_last == 10:
+			if self.tut_count > 80:
+				
+				self.next = TextHover([
+					'\n'.join([
+						'Some devices do not say what is wrong',
+						'with them.  Go stand on the phone to',
+						'diagnose it with your shoes.'])], self)
+				self.tut_last = 11
+				self.tut_count = 0
+		elif self.tut_last == 11:
+			device = self.model.session.active_devices[-1]
+			if device.state_counter > 10 * 30:
+				device.state_counter = 300
+			if device.ailment != 'unknown':
+				self.next = TextHover([
+					'\n'.join([
+						'Now that the phone has been',
+						'diagnosed, it can be treated.',
+						'Go do so.'])], self)
+				self.tut_last = 12
+				self.tut_count = 0
+		elif self.tut_last == 12:
+			device = self.model.session.active_devices[-1]
+			if device.state_counter > 10 * 30:
+				device.state_counter = 300
+			if device.ailment == 'treated':
+				self.tut_last = 13
+				self.tut_count = 0
+				self.model.session.induce_device_storm()
+		elif self.tut_last == 13:
+			if len(self.model.session.active_devices) < 5:
+				self.next = TextHover([
+					'\n'.join([
+						'If a device goes too long without ',
+						'being treated, or its treatment does',
+						'not finish in time, it dies.']),
+
+					'\n'.join([
+						'Any device that dies must be ',
+						'replaced.  If a spare is available, ',
+						'it will be removed from inventory.']),
+						
+					'\n'.join([
+						'If no spares are available, a ',
+						'replacement will be rush ordered, ',
+						'with the cost deducted from the ',
+						'budget. This is expensive.']),
+						
+					'\n'.join([
+						'If the budget goes negative, you and',
+						'your department will be ',
+						'incinera^H^H^H^H^H^H^Hfired.']),
+						
+					'\n'.join([
+						'After each round, a performance ',
+						'review, and possibly a budget ',
+						'allowance, will be given.']),
+						
+					'\n'.join([
+						'The budget may be used for ',
+						'- restocking inventory',
+						'- productivity enhances',
+						'- hiring coworkers',
+						'',
+						'It also pays your salary']),
+						
+					'\n'.join([
+						'This concludes the new ',
+						'employee training program.'])], self)
+				self.tut_last = 14
+				self.tut_count = 0
+		elif self.tut_last == 14:
+			if self.tut_count > 120:
+				from src.menus.TitleScene import TitleScene
+				self.next = TitleScene()
+				
+			
 	
 	def update(self, events, mouse_coords):
-		
 		
 		if self.first:
 			self.first = False
