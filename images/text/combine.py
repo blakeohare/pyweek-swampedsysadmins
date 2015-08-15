@@ -29,7 +29,7 @@ filename_overrides = {
 	'%': 'percent',
 	'+': 'plus',
 	'^': 'caret',
-	'#': 'pound',
+	'#': 'hash',
 	'&': 'ampersand',
 }
 for i in range(10):
