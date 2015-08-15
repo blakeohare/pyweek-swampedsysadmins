@@ -7,7 +7,7 @@ from src.menus.OrderMenu import LAPTOP_PRICE
 
 class Model:
 	def __init__(self, starting_level):
-		self.staff = [Staff('man0'), Staff('woman0')]
+		self.staff = [Staff(0), Staff(1)]
 		self.session = Session(starting_level) # 0 for tutorial
 		
 		self.budget = 1000

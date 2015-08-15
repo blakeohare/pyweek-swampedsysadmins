@@ -29,6 +29,8 @@ class Staff:
 		self.TODO_remove_me.fill((0, 255, 255))
 		self.playboard = None
 		
+		self.images = None # dictionary. keys are 'walk_n0' through 'walk_n3' and 'stand_n'
+		
 	
 	def convert_vector_to_dir(self, x, y):
 		ang = math.atan2(y, x)
@@ -72,12 +74,33 @@ class Staff:
 				dx = VELOCITY * dx / dist
 				dy = VELOCITY * dy / dist
 				self.moving = True'''
+	
+	def get_current_image(self, rc):
+		images = self.images
+		if images == None:
+			images = {}
+			composite = IMAGES.get('staff/composite.png')
+			y = self.id * 64
+			x = 0
+			for dir in 'nsew':
+				for action in ['stand', 'walk']:
+					suffixes = [''] if (action == 'stand') else ('0', '1', '2', '3')
+					for suffix in suffixes:
+						img = pygame.Surface((32, 64)).convert()
+						img.fill((255, 0, 255))
+						img.blit(composite, (-x, -y))
+						img.set_colorkey((255, 0, 255))
+						key = action + '_' + dir + suffix
+						images[key] = img
+						x += 32
+			self.images = images
+			print self.images.keys()
+		if self.moving:
+			return images['walk_' + self.direction + str((rc // 3) & 3)]
+		return images['stand_' + self.direction]
 		
 	def render(self, rc, render_list):
-		
-		img = IMAGES.get('sprites/'+self.id+'_' + self.direction + '0.png')
-		#img = self.TODO_remove_me # TODO images when Christine checks them in
-		
+		img = self.get_current_image(rc)
 		width, height = img.get_size()
 		
 		

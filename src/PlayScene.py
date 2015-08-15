@@ -165,6 +165,7 @@ class PlayScene:
 		return None
 	
 	def get_staff_member(self, id):
+		id = int(id)
 		for member in self.model.staff:
 			if member.id ==  id:
 				return member

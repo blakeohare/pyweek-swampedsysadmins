@@ -220,7 +220,7 @@ class PlayBoard:
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
 					button = {
-						'id': 'iv_take_' + staff.id,
+						'id': 'iv_take_' + str(staff.id),
 						'label': 'Take IV',
 						'x': x,
 						'y': y - 50
@@ -237,7 +237,7 @@ class PlayBoard:
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
 					button = {
-						'id': 'cuc_take_' + staff.id,
+						'id': 'cuc_take_' + str(staff.id),
 						'label': 'Take Cucumbers',
 						'x': x,
 						'y': y - 50
@@ -254,7 +254,7 @@ class PlayBoard:
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
 					button = {
-						'id': 'tape_take_' + staff.id,
+						'id': 'tape_take_' + str(staff.id),
 						'label': 'Pick Tape',
 						'x': x,
 						'y': y - 50
@@ -271,7 +271,7 @@ class PlayBoard:
 				dy = staff.y - y
 				if dx ** 2 + dy ** 2 < 48 ** 2:
 					button = {
-						'id': 'jacket_take_' + staff.id,
+						'id': 'jacket_take_' + str(staff.id),
 						'label': 'Take Jacket',
 						'x': x,
 						'y': y - 50
