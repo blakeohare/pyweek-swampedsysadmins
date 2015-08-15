@@ -1,5 +1,6 @@
 from src.Staff import Staff
 from src.Session import Session
+from src.ImageLibrary import IMAGES
 
 from src.menus.OrderMenu import PHONE_PRICE
 from src.menus.OrderMenu import TABLET_PRICE
@@ -7,7 +8,8 @@ from src.menus.OrderMenu import LAPTOP_PRICE
 
 class Model:
 	def __init__(self, starting_level):
-		self.staff = [Staff(0), Staff(1)]
+		self.staff = [Staff(0)]
+		self.max_staff_size = IMAGES.get('staff/composite.png').get_height() // 64
 		self.session = Session(starting_level) # 0 for tutorial
 		
 		self.budget = 1000
