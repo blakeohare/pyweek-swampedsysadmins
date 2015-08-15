@@ -34,7 +34,7 @@ c	d
 RAW_OFFICE = """
 xxxxxxxxxxxxxxxxxxxx
 xxxxxxxxxxxxxxxxxxxx
-xi..c..............x
+xi...c.............x
 x..................x
 x..................x
 x..................x
