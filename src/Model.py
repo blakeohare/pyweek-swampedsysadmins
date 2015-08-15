@@ -10,7 +10,7 @@ class Model:
 	def __init__(self, starting_level):
 		self.staff = [Staff(0)]
 		self.max_staff_size = IMAGES.get('staff/composite.png').get_height() // 64
-		self.session = Session(starting_level) # 0 for tutorial
+		self.session = Session(starting_level, self) # 0 for tutorial
 		
 		self.budget = 1000
 		self.inventory_ivs = 15
