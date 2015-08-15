@@ -158,20 +158,26 @@ class PlayBoard:
 					for member in members:
 						dx = member.x - event.x
 						dy = member.y - event.y
-						dist = (dx ** 2 + dy ** 2) ** .5
+						dist = dx ** 2 + dy ** 2
 						if self.is_line_segment_okay(event.x, event.y, member.x, member.y):
-							sorted_members.append((dist, member))
+							sorted_members.append((dist, member, False))
+						else:
+							sorted_members.append((dist, member, True)) # this 3rd item is whether or not the clicked point is okay. If it isn't, then fall back to the old behavior with the offset
 					sorted_members.sort(key=lambda x:x[0])
 					
 					if len(sorted_members) > 0:
-						member = sorted_members[0][1]
-						self.drag_offset = (0, 0) #(member.x - event.x, member.y - event.y)
+						ignore, member, use_offset = sorted_members[0]
+						if use_offset:
+							self.drag_offset = (member.x - event.x, member.y - event.y)
+						else:
+							self.drag_offset = (0, 0)
 						drag = DragDescriptor(member)
 						drag.is_active = True
 						self.drag_descriptor.append(drag)
 						member.drag_path = drag
 						self.active_drag = drag
-						self.active_drag.add_point(event.x, event.y, self)
+						if not use_offset:
+							self.active_drag.add_point(event.x, event.y, self)
 			elif event.mouseup:
 				if self.active_drag != None:
 					self.active_drag.is_active = False
