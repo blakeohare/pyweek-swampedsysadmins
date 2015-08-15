@@ -23,32 +23,32 @@ class OptionsMenu:
 		self.sfx_vol = MAGIC_POTATO.get_sound_volume()
 		self.music_vol = MAGIC_POTATO.get_music_volume()
 		
+		self.mouse = 0
+		self.over = None
+		
 	def update(self, events, mouse_coords):
 		self.cursor = mouse_coords
 		
 		for event in events:
 			if event.mousedown:
-				if self.currently_over != None:
+				if self.currently_over in ['full_screen', 'back', 'main_menu']:
 					self.do_command(self.currently_over)
+				elif self.currently_over in ['sfx_volume', 'music_volume']:
+					self.mouse = 1
+					self.over = self.currently_over
+					self.do_sound(self.over)
+			elif event.mouseup:
+				self.mouse = 0
+				self.over = None
+			elif self.mouse == 1:
+				self.do_sound(self.over)
 	
 	def do_command(self, id):
-		width_over_two = GAME_WIDTH // 2
 		button = self.buttons[id]
-		mx, my = self.cursor
 		if id == 'full_screen':
 			if MAGIC_POTATO.is_full_screen():
 				MAGIC_POTATO.set_full_screen(False)
 			else: MAGIC_POTATO.set_full_screen(True)
-		elif id == 'sfx_volume':
-			if mx < (width_over_two - 20): pass
-			else:
-				MAGIC_POTATO.set_sound_volume((mx - width_over_two) // 2)
-				self.sfx_vol = MAGIC_POTATO.get_sound_volume()
-		elif id == 'music_volume':
-			if mx < (width_over_two - 20): pass
-			else:
-				MAGIC_POTATO.set_music_volume((mx - width_over_two) // 2)
-				self.music_vol = MAGIC_POTATO.get_music_volume()
 		elif id == 'back':
 			if len(self.buttons) == 5:
 				self.next = self.bg
@@ -58,6 +58,21 @@ class OptionsMenu:
 		elif id == 'main_menu':
 			from src.menus.TitleScene import TitleScene # because top of file didn't work
 			self.next = TitleScene()
+	
+	def do_sound(self, id):
+		width_over_two = GAME_WIDTH // 2
+		mx, my = self.cursor
+		if id == 'sfx_volume':
+			if mx < (width_over_two - 20): pass
+			else:
+				MAGIC_POTATO.set_sound_volume((mx - width_over_two) // 2)
+				self.sfx_vol = MAGIC_POTATO.get_sound_volume()
+		elif id == 'music_volume':
+			if mx < (width_over_two - 20): pass
+			else:
+				MAGIC_POTATO.set_music_volume((mx - width_over_two) // 2)
+				self.music_vol = MAGIC_POTATO.get_music_volume()
+
 	
 	def render(self, screen, render_counter):
 		if self.bg != None:
@@ -85,13 +100,19 @@ class OptionsMenu:
 			button = self.buttons[id]
 			hover = mx > button[0] and mx < button[2] and my > button[1] and my < button[3]
 			
-			if hover:
+			if self.over == id:
 				current = id
 				button_color = (255, 255, 255, 255)
+				text_color = 'white'
+			elif hover and (self.over == None):
+				current = id
+				button_color = (255, 255, 255, 255)
+				text_color = 'white'
 			else:
 				button_color = (150, 150, 150, 150)
+				text_color = 'gray'
 			
-			coords = TEXT.render(screen, label, 'white' if hover else 'gray', x, y)
+			coords = TEXT.render(screen, label, text_color, x, y)
 			if id == 'full_screen':
 				self.buttons[id] = (x, y, width_over_two + 20, coords[1])
 				pygame.draw.rect(screen, button_color, pygame.Rect(width_over_two, y, 15, 15), 0 if MAGIC_POTATO.is_full_screen() else 1)
