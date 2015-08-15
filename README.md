@@ -41,7 +41,7 @@ Credits (alphabetical)
 ----------------------
 * Blake O'Hare (mspaintmaestro@gmail.com) - Programming
 * Christine Sandquist - Art
-* [Amras0000][sc] - Music (FIXME: and sounds?)
+* [Amras0000][sc] - Music and Sound
 * Ted Burton - Writing and Additional Programming
 
 [sc]: https://soundcloud.com/amras0000
