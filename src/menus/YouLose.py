@@ -28,11 +28,11 @@ class YouLose:
 			self.allow_click = True
 			message = [
 				'Due to the lack of responsiveness',
-				'in the incoming repair requests,',
+				'to the incoming repair requests,',
 				'the IT department has singlehandedly',
 				'bankrupted ZP&B Inc, creating',
 				'a snowball effect that has sent the',
-				'global market into a crash only',
+				'global economy into a crash only',
 				'describable as a second dark age.',
 				'',
 				'tap anywhere to submit resume to',
