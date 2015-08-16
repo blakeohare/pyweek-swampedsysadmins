@@ -1,9 +1,10 @@
 Swamped Sysadmins
 =================
 
-By [Team Nerd Paradise][np]
+By [Team Nerd Paradise][np] - [Github][]
 
 [np]: https://pyweek.org/e/np9g/
+[github]: https://github.com/blakeohare/pyweek-np20
 
 Created for [PyWeek][] 20 - "Data data data" challenge
 

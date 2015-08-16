@@ -128,16 +128,16 @@ class PlayScene:
 						'good old keyboard and mouse.']),
 
 					'\n'.join([
-						'This tablet is angry.  It needs a ',
-						'whale songs audio tape to calm down.',
-						'Go get one from the tape shelf.']),
-						
-					'\n'.join([
 						'We eagerly await the arrival of scent',
 						'based computing, so we can announce ',
 						'that we are the first in our industry',
 						'to adopt what will undoubtedly be a ',
-						'revolution in computing.'])], self)
+						'revolution in computing.']),
+						
+					'\n'.join([
+						'This tablet is angry.  It needs a ',
+						'whale songs audio tape to calm down.',
+						'Go get one from the tape shelf.'])], self)
 				self.model.inventory_tapes = 2
 				self.tut_last = 6
 				self.tut_count = 0
@@ -243,7 +243,7 @@ class PlayScene:
 					'\n'.join([
 						'The budget may be used for ',
 						'- restocking inventory',
-						'- productivity enhances',
+						'- productivity enhancers',
 						'- hiring coworkers',
 						'',
 						'It also pays your salary']),
