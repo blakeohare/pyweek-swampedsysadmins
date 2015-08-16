@@ -10,14 +10,12 @@ Created for [PyWeek][] 20 - "Data data data" challenge
 [pyweek]: https://pyweek.org
 
 This entry is written in Python, and tested in versions 2.7, 3.2, 3.3, 
-and 3.4, with [PyGame][] 1.9 library installed.
-
-[pygame]: http://www.pygame.org/
+and 3.4, with PyGame 1.9 library installed.
 
 
 Instructions
 ------------
-To run the game, run FIXME in this folder.
+To run the game, run game.py in this folder.
 
 
 Description
