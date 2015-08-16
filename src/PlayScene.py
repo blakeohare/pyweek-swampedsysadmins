@@ -67,6 +67,9 @@ class PlayScene:
 						'bin in the corner.'])], self)
 				self.tut_last = 1
 		elif self.tut_last == 1:
+			device = self.model.session.active_devices[0]
+			if device.ttl < 10:
+				device.ttl = 10
 			if self.model.staff[0].holding == 'iv':
 				self.next = TextHover([
 					'\n'.join([
@@ -77,8 +80,8 @@ class PlayScene:
 		
 		elif self.tut_last == 2:
 			device = self.model.session.active_devices[0]
-			if device.state_counter > 5 * 30:
-				device.state_counter = 300
+			if device.ttl < 10:
+				device.ttl = 10
 			if device.state == 'treated':
 				self.next = TextHover([
 					'\n'.join([
@@ -102,8 +105,8 @@ class PlayScene:
 				self.tut_count = 0
 		elif self.tut_last == 4:
 			device = self.model.session.active_devices[-1]
-			if device.state_counter > 10 * 30:
-				device.state_counter = 300
+			if device.ttl < 10:
+				device.ttl = 10
 			if device.state == 'treated':
 				self.next = TextHover([
 					'\n'.join([
@@ -140,8 +143,8 @@ class PlayScene:
 				self.tut_count = 0
 		elif self.tut_last == 6:
 			device = self.model.session.active_devices[-1]
-			if device.state_counter > 10 * 30:
-				device.state_counter = 300
+			if device.ttl < 10:
+				device.ttl = 10
 			if device.state == 'treated':
 				self.next = TextHover([
 					'\n'.join([
@@ -153,7 +156,6 @@ class PlayScene:
 				self.model.session.induce_device('phone', 'crazy')
 		elif self.tut_last == 7:
 			if self.tut_count > 80:
-				
 				self.next = TextHover([
 					'\n'.join([
 						'This is a phone.  It has gone crazy.',
@@ -185,7 +187,6 @@ class PlayScene:
 				self.model.session.induce_device('phone', 'unknown')
 		elif self.tut_last == 10:
 			if self.tut_count > 80:
-				
 				self.next = TextHover([
 					'\n'.join([
 						'Some devices do not say what is wrong',
@@ -195,8 +196,8 @@ class PlayScene:
 				self.tut_count = 0
 		elif self.tut_last == 11:
 			device = self.model.session.active_devices[-1]
-			if device.state_counter > 10 * 30:
-				device.state_counter = 300
+			if device.ttl < 10:
+				device.ttl = 10
 			if device.ailment != 'unknown':
 				self.next = TextHover([
 					'\n'.join([
@@ -206,10 +207,7 @@ class PlayScene:
 				self.tut_last = 12
 				self.tut_count = 0
 		elif self.tut_last == 12:
-			device = self.model.session.active_devices[-1]
-			if device.state_counter > 10 * 30:
-				device.state_counter = 300
-			if device.ailment == 'treated':
+			if len(self.model.session.active_devices) == 0:
 				self.tut_last = 13
 				self.tut_count = 0
 				self.model.session.induce_device_storm()

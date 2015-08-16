@@ -25,7 +25,7 @@ class WrapperMenu:
 		self.session = model.session
 		self.devices = model.session.devices
 		self.score_menu = ScoreMenu(self, model)
-		self.graph_menu = GraphMenu(self, model)
+		#self.graph_menu = GraphMenu(self, model)
 		self.hiring_menu = HiringMenu(self, model)
 		self.order_menu = OrderMenu(self, model)
 		self.toys_menu = ToysMenu(self, model)
@@ -34,7 +34,7 @@ class WrapperMenu:
 			self.order_menu,
 			self.toys_menu,
 			self.hiring_menu,
-			self.graph_menu,
+			#self.graph_menu,
 			]
 		self.mouse_xy = (0, 0)
 		self.tab_regions = [None] * len(self.ordered)
