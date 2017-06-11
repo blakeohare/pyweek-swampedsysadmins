@@ -29,7 +29,7 @@ class Device:
 		self.end = None
 		self.response_time = 0
 		self.type = 'device'
-		self.device_type = device_type # { 'phone', 'tablet', 'laptop' }
+		self.device_type = device_type // { 'phone', 'tablet', 'laptop' }
 		self.x = START_X
 		self.y = START_Y
 		self.landing_x, self.landing_y = playboard.get_random_open_tile()
@@ -135,7 +135,7 @@ class Device:
 			elif self.ailment == 'crazy':
 				treat_time = CRAZY_TREAT_TIME
 			elif self.ailment == 'dead':
-				treat_time = 9999999 # won't happen
+				treat_time = 9999999 // won't happen
 			elif self.ailment == 'unknown':
 				treat_time = UNKNOWN_TREAT_TIME
 			

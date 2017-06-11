@@ -15,7 +15,7 @@ class ScoreMenu:
 			
 			elements = []
 			
-			#elements.append(create_ui_text('Howdy - ScoreMenu', 'red', 5, 5))
+			//elements.append(create_ui_text('Howdy - ScoreMenu', 'red', 5, 5))
 			
 			col0 = 5
 			col1 = 200

@@ -13,22 +13,23 @@ BEAN_BAG_PRICE = 200
 FOOSBALL_PRICE = 500
 
 
-# 1 - lava lamp 1x1
-# 2 - plush 2x1
-# 3 - plant 1x1
-# 4 - bean bag 2x2
-# 5 - foosball 3x2
+/*
+	1 - lava lamp 1x1
+	2 - plush 2x1
+	3 - plant 1x1
+	4 - bean bag 2x2
+	5 - foosball 3x2
 
-# 7 - desk N
-# 8 - desk S
-# 9 - desk E
-# 0 - desk W
+	7 - desk N
+	8 - desk S
+	9 - desk E
+	0 - desk W
 
-# builds a map.
-# in render, flattens the current cursor onto a copy of the interesting_coords
-# when you click, apply the furniture to the model, charge the user, and set .next to an instance of this class with no cursor type
-# when there is no cursor type, change the exit text to "Done", otherwise "Cancel"
-
+	builds a map.
+	in render, flattens the current cursor onto a copy of the interesting_coords
+	when you click, apply the furniture to the model, charge the user, and set .next to an instance of this class with no cursor type
+	when there is no cursor type, change the exit text to "Done", otherwise "Cancel"
+*/
 class PlaceFurnitureMenu:
 	def __init__(self, model, return_scene, item_type):
 		self.next = None

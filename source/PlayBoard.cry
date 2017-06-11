@@ -323,7 +323,7 @@ class PlayBoard:
 		return None if len(output) == 0 else output
 	
 	def get_random_open_tile(self, allow_overlap=False):
-		# this isn't called very often so it can be stupid and brute force
+		// this isn't called very often so it can be stupid and brute force
 		potential = []
 		
 		current_devices = {}

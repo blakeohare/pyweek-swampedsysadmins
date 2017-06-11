@@ -114,9 +114,3 @@ class DragDescriptor:
 				distance_covered = 0.0
 
 		return output
-
-			
-		
-		
-		
-		
