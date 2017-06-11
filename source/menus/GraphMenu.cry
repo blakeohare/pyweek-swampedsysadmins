@@ -1,20 +1,25 @@
-from src.menus.UiElement import create_ui_button
-from src.menus.UiElement import create_ui_text
 
-class GraphMenu:
-	def __init__(self, wrapper_menu, model):
-		self.model = model
-		self.elements = None
-		self.parent = wrapper_menu
-		self.tab = 'Timesheet'
-		self.color = (40, 100, 60)
+class GraphMenu {
+	field model;
+	field elements;
+	field parent;
+	field tab;
+	field color;
 	
-	def get_ui_elements(self):
-		if self.elements == None:
-			elements = []
-			
-			elements.append(create_ui_text('Howdy - GraphMenu', 'yellow', 0, 0))
-			
-			self.elements = elements
-		return self.elements
+	constructor(wrapper_menu, model) {
+		this.model = model;
+		this.elements = null;
+		this.parent = wrapper_menu
+		this.tab = 'Timesheet';
+		this.color = [40, 100, 60];
+	}
 	
+	function get_ui_elements() {
+		if (this.elements == null) {
+			elements = [];
+			elements.add(create_ui_text('Howdy - GraphMenu', 'yellow', 0, 0));
+			this.elements = elements;
+		}
+		return this.elements;
+	}
+}

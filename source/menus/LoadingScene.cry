@@ -1,0 +1,33 @@
+class LoadingScene {
+
+	field loader = null;
+	field progress = 0.0;
+	field next = null;
+
+	constructor() { }
+
+	function update(events, mouse_pos) {
+		if (this.loader == null) {
+			this.loader = new ImageResources.ImageSheet.loadFromResourcesAsync('everything');
+		}
+
+		if (this.loader.isDone()) {
+			ImageLibrary.initialize(this.loader);
+			this.next = new TitleScene();
+			this.progress = 1.0;
+		} else {
+			this.progress = this.loader.getProgress();
+		}
+	}
+
+	function render(screen, rc) {
+		Draw.fill(0, 0, 0);
+		left = GAME_WIDTH / 10;
+		width = GAME_WIDTH * 8 / 10;
+		top = GAME_WIDTH / 2 - 5;
+		height = 10;
+		Draw.rectangle(left, top, width, height, 40, 40, 40);
+		barWidth = Math.floor(this.progress * width);
+		Draw.rectangle(left, top, barWidth, height, 0, 128, 255);
+	}
+}

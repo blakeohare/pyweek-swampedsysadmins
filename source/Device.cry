@@ -1,29 +1,28 @@
-import math
-import random
+import Math;
+import Random;
 
-from src.ImageLibrary import IMAGES
+const FLYING_FRAMES = 30
+const START_X = 400
+const START_Y = 30
 
-from src.Sound import SND
+const SICK_TREAT_TIME = 30 * 6
+const SAD_TREAT_TIME = 30 * 7
+const ANGRY_TREAT_TIME = 30 * 8
+const CRAZY_TREAT_TIME = 30 * 9
+const UNKNOWN_TREAT_TIME = 30 * 6
 
-FLYING_FRAMES = 30
-START_X = 400
-START_Y = 30
+const STARTING_TTL = 30 * 40
 
-ID_ALLOC = [1]
 
-SICK_TREAT_TIME = 30 * 6
-SAD_TREAT_TIME = 30 * 7
-ANGRY_TREAT_TIME = 30 * 8
-CRAZY_TREAT_TIME = 30 * 9
-UNKNOWN_TREAT_TIME = 30 * 6
 
-STARTING_TTL = 30 * 40
+class Device {
+	static field ID_ALLOC = 1;
+	static field AILMENTS = 'sick sad angry crazy'.split(' ');
 
-AILMENTS = 'sick sad angry crazy'.split(' ')
+	field id;
 
-class Device:
-	def __init__(self, playboard, game_time, device_type, x, y, ailment):
-		self.id = ID_ALLOC[0]
+	constructor(playboard, game_time, device_type, x, y, ailment) {
+		this.id = Device.ID_ALLOC++
 		ID_ALLOC[0] += 1
 		self.start = game_time
 		self.end = None
@@ -37,10 +36,10 @@ class Device:
 		self.landing_y = self.landing_y * 32 + 16
 		self.ttl = STARTING_TTL
 		
-		self.ailment = ailment # { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
+		self.ailment = ailment // { 'sick', 'sad', 'angry', 'crazy', 'dead', 'unknown' }
 		self.actual_ailment = random.choice(AILMENTS)
 		self.unknown_discovery_counter = 0
-		self.state = 'flying' # { 'flying', 'ailed', 'treated', 'new', 'dead' }
+		self.state = 'flying' // { 'flying', 'ailed', 'treated', 'new', 'dead' }
 		self.resolution = None
 		self.state_counter = 0
 		self.playboard = playboard

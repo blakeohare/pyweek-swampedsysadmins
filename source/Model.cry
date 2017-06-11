@@ -6,34 +6,43 @@ from src.menus.OrderMenu import PHONE_PRICE
 from src.menus.OrderMenu import TABLET_PRICE
 from src.menus.OrderMenu import LAPTOP_PRICE
 
-class Model:
-	def __init__(self, starting_level):
-		self.staff = [Staff(0)]
-		self.max_staff_size = IMAGES.get('staff/composite.png').get_height() // 64
-		self.furniture = []
-		
-		self.budget = 1000
-		self.inventory_ivs = 15
-		self.inventory_cucumbers = 5
-		self.inventory_tapes = 5
-		self.inventory_jackets = 5
-		self.inventory_laptops = 3
-		self.inventory_phones = 3
-		self.inventory_tablets = 3
-		
-		self.session = Session(starting_level, self) # 0 for tutorial
-		
-		
-		
-	def increment_level(self):
-		level_id = self.session.level + 1
-		self.session = Session(level_id)
+class Model {
+	field staff = [];
+	field max_staff_size;
+	field furniture = [];
 	
-	def special_order_laptop(self):
-		self.budget -= LAPTOP_PRICE
+	field budget = 1000;
+	field inventory_ivs = 15;
+	field inventory_cucumbers = 5;
+	field inventory_tapes = 5;
+	field inventory_jackets = 5;
+	field inventory_laptops = 3;
+	field inventory_phones = 3;
+	field inventory_tablets = 3;
 	
-	def special_order_phone(self):
-		self.budget -= PHONE_PRICE
+	field session;
+
+	constructor(starting_level) {
+		this.staff.add(new Staff(0));
+		this.max_staff_size = ImageLibrary.get('staff/composite.png').height;
+		
+		this.session = new Session(starting_level, this); // 0 for tutorial
+	}
+		
+	function increment_level() {
+		level_id = this.session.level + 1;
+		this.session = new Session(level_id);
+	}
 	
-	def special_order_tablet(self):
-		self.budget -= TABLET_PRICE
+	function special_order_laptop() {
+		this.budget -= LAPTOP_PRICE;
+	}
+	
+	function special_order_phone() {
+		this.budget -= PHONE_PRICE;
+	}
+	
+	function special_order_tablet() {
+		this.budget -= TABLET_PRICE;
+	}
+}

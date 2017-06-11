@@ -94,4 +94,8 @@ for color in COLORS:
 		x += width
 	y += height
 
-pygame.image.save(output, 'composite.png')
+transparentBg = pygame.Surface(output.get_size(), pygame.SRCALPHA)
+output.set_colorkey(BACKGROUND)
+transparentBg.blit(output, (0, 0))
+
+pygame.image.save(transparentBg, 'composite.png')

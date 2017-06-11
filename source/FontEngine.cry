@@ -1,28 +1,30 @@
-import pygame
-from src.ImageLibrary import IMAGES
-from src.constants import *
-# These values are in the composite image generator
-LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\':0123456789$%+^&#'
-COLORS = 'white gray red orange yellow green blue purple'.split(' ')
-WIDTH = 7 * 2
-HEIGHT = 9 * 2
-class FontEngine:
-	def __init__(self):
-		self.raw_letters_by_color = None
-	
-	def initialize(self):
-		raw = IMAGES.get('text/composite.png')
-		self.raw_letters_by_color = {}
-		row = 0
-		for color in COLORS:
-			letters = {}
-			self.raw_letters_by_color[color] = letters
-			y = row * HEIGHT
-			x = 0
-			col = 0
-			for letter in LETTERS:
-				x = col * WIDTH
-				col += 1
+
+class FontEngine {
+	static field raw_letters_by_color = null;
+
+	static function initialize() {
+
+		// These values are in the composite image generator
+		LETTERS = '`abcdefghijklmnopqrstuvwxyz.?!/-,\':0123456789$%+^&#'
+
+		WIDTH = 7 * 2
+		HEIGHT = 9 * 2
+
+		raw = ImageLibrary.images['text/composite.png'];
+		FontEngine.raw_letters_by_color = {};
+		row = 0;
+		COLORS = 'white gray red orange yellow green blue purple'.split(' ');
+		for (color : COLORS) {
+			letters = {};
+			FontEngine.raw_letters_by_color[color] = letters;
+			y = row * HEIGHT;
+			x = 0;
+			col = 0;
+			for (letter : LETTERS) {
+				x = col * WIDTH;
+				col++;
+				// YOU LEFT OFF HERE REALIZING THAT YOU NEED CROP FUNCTIONALITY
+				// I could do this by using drawRegion, but I don't want to add more clutter.
 				img = pygame.Surface((WIDTH, HEIGHT)).convert()
 				img.fill((255, 0, 255))
 				img.blit(raw, (-x, -y))

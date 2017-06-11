@@ -1,31 +1,37 @@
-class MagicPotato:
-	def __init__(self):
-		self._sound_volume = .7
-		self._music_volume = .7
-		self._is_full_screen = False
+import Math;
+
+class MagicPotato {
+
+	static field _sound_volume = .7;
+	static field _music_volume = .7;
+
+	function get_sound_volume() {
+		return Math.floor(MagicPotato._sound_volume * 100);
+	}
 	
-	def get_sound_volume(self):
-		return int(self._sound_volume * 100)
+	function set_sound_volume(percent) {
+		if (percent < 0) percent = 0;
+		if (percent > 100) percent = 100;
+		ratio = percent / 100.0;
+		this._sound_volume = ratio;
+	}
 	
-	def set_sound_volume(self, percent):
-		if percent < 0: percent = 0
-		if percent > 100: percent = 100
-		ratio = percent / 100.0
-		self._sound_volume = ratio
+	function get_music_volume() {
+		return Math.floor(this._music_volume * 100);
+	}
 	
-	def get_music_volume(self):
-		return int(self._music_volume * 100)
+	function set_music_volume(percent) {
+		if (percent < 0) percent = 0;
+		if (percent > 100) percent = 100;
+		ratio = percent / 100.0;
+		this._music_volume = ratio;
+	}
 	
-	def set_music_volume(self, percent):
-		if percent < 0: percent = 0
-		if percent > 100: percent = 100
-		ratio = percent / 100.0
-		self._music_volume = ratio
+	function is_full_screen() {
+		return this._is_full_screen;
+	}
 	
-	def is_full_screen(self):
-		return self._is_full_screen
-	
-	def set_full_screen(self, value):
-		self._is_full_screen = value
-	
-MAGIC_POTATO = MagicPotato()
+	function set_full_screen(value) {
+		this._is_full_screen = value;
+	}
+}

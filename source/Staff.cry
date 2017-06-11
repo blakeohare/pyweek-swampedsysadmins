@@ -1,131 +1,124 @@
-import pygame
-import math
+import Math;
 
-from src.ImageLibrary import IMAGES
+const VELOCITY = 1.5
+const PI_OVER_4 = Math.PI / 4;
 
-VELOCITY = 1.5
+class Staff {
 
-class Staff:
-	def __init__(self, id):
-		# as a person
+	// as a person
+	field id;
+	field happiness = .5;
+
+	// as a sprite
+	field x = 64;
+	field y = 96;
+	field direction = 's';
+	field moving = false;
+	field target_x = 0;
+	field target_y = 0;
+	field move_please = false;
+	field drag_path = null;
+
+	field holding = null;
+	field velocity = 5.0;
+
+	field playboard = null;
+
+	// lazy-init dictionary
+	// keys are 'walk_n0' through 'walk_n3' and 'stand_n' (where n can be n, s, e, w)
+	field images = null;
+
+	constructor(id) {
+		// as a person
 		self.id = id
-		self.happiness = .5
-		
-		# as a sprite
-		self.x = 64
-		self.y = 96
-		self.direction = 's'
-		self.moving = False
-		self.target_x = 0
-		self.target_y = 0
-		self.move_please = False
-		self.drag_path = None
-		
-		self.holding = None
-		
-		self.velocity = 5.0
-		
-		self.TODO_remove_me = pygame.Surface((32, 64)).convert()
-		self.TODO_remove_me.fill((0, 255, 255))
-		self.playboard = None
-		
-		self.images = None # dictionary. keys are 'walk_n0' through 'walk_n3' and 'stand_n'
+	}
 		
 	
-	def convert_vector_to_dir(self, x, y):
-		ang = math.atan2(y, x)
-		piOver4 = 3.14159265358979 / 4
-		if ang < -3 * piOver4 or ang > 3 * piOver4: return 'w'
-		if ang < piOver4 and ang > -piOver4: return 'e'
-		if y < 0: return 'n'
-		return 's'
+	function convert_vector_to_dir(x, y) {
+		ang = Math.arctan(y, x);
+		if (ang < -3 * PI_OVER_4 || ang > 3 * PI_OVER_4) return 'w';
+		if (ang < PI_OVER_4 && ang > -PI_OVER_4) return 'e';
+		if (y < 0) return 'n';
+		return 's';
+	}
+
+	function update(playboard) {
+		this.playboard = playboard;
+		this.moving = false;
+		
+		if (this.drag_path != null) {
+			old_x = this.x;
+			old_y = this.y;
+			this.drag_path.do_update(this.velocity);
+			new_x = this.x;
+			new_y = this.y;
+			dx = new_x - old_x;
+			dy = new_y - old_y;
+			if (dx != 0 || dy != 0) {
+				this.moving = true;
+				this.direction = this.convert_vector_to_dir(dx, dy);
+			}
 			
+			if (this.drag_path.done) {
+				this.drag_path = null;
+			}
+		}
+	}
 	
-	def update(self, playboard):
-		self.playboard = playboard
-		self.moving = False
+	function get_current_image(rc) {
+		if (this.images == null) {
+			this.images = {};
+			templateName = 'template' + (this.id % 4 + 1);
+			for (dir : 'nsew') {
+				this.images['stand_' + dir] = ImageLibrary.images.get(templateName + '_' + dir + '0.png');
+				walkCounter = 0;
+				for (imgId : [1, 0, 2, 0]) {
+					this.images['walk_' + dir + walkCounter++] = ImageLibrary.images.get(templateName + '_' + dir + imgId + '.png');
+				}
+			}
+		}
+			
+		if (this.moving) {
+			return this.images['walk_' + this.direction + str((rc / 3) % 3)];
+		}
+		return images['stand_' + this.direction];
+	}
 		
-		if self.drag_path != None:
-			old_x, old_y = self.x, self.y
-			self.drag_path.do_update(self.velocity)
-			new_x, new_y = self.x, self.y
-			dx = new_x - old_x
-			dy = new_y - old_y
-			if dx != 0 or dy != 0:
-				self.moving = True
-				self.direction = self.convert_vector_to_dir(dx, dy)
-			
-			if self.drag_path.done:
-				self.drag_path = None
+	function render(rc, render_list) {
+		img = this.get_current_image(rc);
+
+		width = img.width;
+		height = img.height;
 		
-		'''
-		if self.move_please:
-			dx = self.target_x - self.x
-			dy = self.target_y - self.y
-			
-			dist = (dx ** 2 + dy ** 2) ** .5
-			
-			if dist < VELOCITY:
-				self.x = self.target_x
-				self.y = self.target_y
-				self.move_please = False
-				self.moving = False
-			else:
-				dx = VELOCITY * dx / dist
-				dy = VELOCITY * dy / dist
-				self.moving = True'''
+		px = Math.floor(this.x) - width / 2;
+		py = Math.floor(this.y) - height;
+		
+		// Image: I, sort value, image, x, y
+		render_list.add(('I', self.y * 1000000 + self.x, img, px, py))
+		
+		//if self.playboard != None and self.playboard.selected == self:
+		//    // Rectangle: R, sort value, 
+		//    //render_list.append(('R', self.y * 1000000 + self.x - 1, px - 2, py - 2, img.get_width() + 4, img.get_height() + 4, (255, 255, 255)))
 	
-	def get_current_image(self, rc):
-		images = self.images
-		if images == None:
-			images = {}
-			composite = IMAGES.get('staff/composite.png')
-			y = self.id * 64
-			x = 0
-			for dir in 'nsew':
-				for action in ['stand', 'walk']:
-					suffixes = [''] if (action == 'stand') else ('0', '1', '2', '3')
-					for suffix in suffixes:
-						img = pygame.Surface((32, 64)).convert()
-						img.fill((255, 0, 255))
-						img.blit(composite, (-x, -y))
-						img.set_colorkey((255, 0, 255))
-						key = action + '_' + dir + suffix
-						images[key] = img
-						x += 32
-			self.images = images
-			
-		if self.moving:
-			return images['walk_' + self.direction + str((rc // 3) & 3)]
-		return images['stand_' + self.direction]
-		
-	def render(self, rc, render_list):
-		img = self.get_current_image(rc)
-		width, height = img.get_size()
-		
-		
-		px = int(self.x) - width // 2
-		py = int(self.y) - height
-		
-		# Image: I, sort value, image, x, y
-		render_list.append(('I', self.y * 1000000 + self.x, img, px, py))
-		
-		#if self.playboard != None and self.playboard.selected == self:
-		#	# Rectangle: R, sort value, 
-		#	render_list.append(('R', self.y * 1000000 + self.x - 1, px - 2, py - 2, img.get_width() + 4, img.get_height() + 4, (255, 255, 255)))
+		if (this.holding != null) {
+			switch (this.holding) {
+				case 'iv':
+					img = ImageLibrary.images['treatments/iv_bag.png'];
+					break;
+				case 'cucumber':
+					img = ImageLibrary.images['treatments/cucumber.png'];
+					break;
+				case 'tape':
+					img = ImageLibrary.images['treatments/tape.png'];
+					break;
+				case 'jacket':
+					img = ImageLibrary.images['treatments/jacket.png'];
+					break;
+				default:
+					throw new Exception("Invalid item holding." + this.holding);
+			}
 	
-		if self.holding != None:
-			if self.holding == 'iv':
-				img = IMAGES.get('treatments/iv_bag.png')
-			elif self.holding == 'cucumber':
-				img = IMAGES.get('treatments/cucumber.png')
-			elif self.holding == 'tape':
-				img = IMAGES.get('treatments/tape.png')
-			elif self.holding == 'jacket':
-				img = IMAGES.get('treatments/jacket.png')
-			else:
-				raise Exception("Invalid item holding." + self.holding)
-				
-			render_list.append(('I', self.y * 1000000 + self.x + 1, img, self.x - img.get_width() // 2, self.y - 64 - img.get_height()))
-				
-	
+			render_list.add(('I', this.y * 1000000 + this.x + 1, img, this.x - img.width / 2, this.y - 64 - img.height));
+		}
+	}
+}

@@ -1,14 +1,6 @@
 from src.menus.UiElement import create_ui_button
 from src.menus.UiElement import create_ui_text
 
-IV_PRICE = 10
-CUCUMBER_PRICE = 10
-TAPE_PRICE = 15
-JACKET_PRICE = 30
-PHONE_PRICE = 200
-TABLET_PRICE = 250
-LAPTOP_PRICE = 300
-
 class OrderMenu:
 	def __init__(self, wrapper_menu, model):
 		self.model = model
